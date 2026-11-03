@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f4d2c"><link rel="manifest" href="/static/manifest.json">
+<title>FarmSaathi: your farming friend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#0f4d2c;--leaf:#2f8f46;--mint:#e6f3e4;--field:#f1f6ee;--sun:#f4b41a;--sunsoft:#fff1c9;--ink:#1b2a1f;--mute:#5b6b5f;--line:#d7e3d3;--sky:#d9eefa;--soil:#7a4b2a;
+--okbg:#e3f4e6;--warnbg:#fff1c9;--badbg:#fde4df;--bad:#c7371f;--warn:#b57a00;
+--hd:'Baloo 2','Noto Sans',system-ui,sans-serif;--bd:'Noto Sans',system-ui,sans-serif}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--bd);font-size:16px;line-height:1.5;color:var(--ink);background:var(--field)}
+h1,h2,h3{font-family:var(--hd);margin:0;line-height:1.15}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.hid{display:none}
+
+/* hero */
+.hero{position:relative;overflow:hidden;color:#fff;background:linear-gradient(#7cc4ea 0%,#bfe6f6 55%,#e9f6ef 100%);padding:18px 0 92px}
+.hero .sun{position:absolute;right:30px;top:16px;width:74px;height:74px;border-radius:50%;background:var(--sun);box-shadow:0 0 0 14px #f4b41a33,0 0 0 30px #f4b41a1c}
+.hero svg{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:96px}
+.brand{position:relative;display:flex;align-items:center;gap:10px;max-width:1100px;margin:0 auto;padding:0 14px}
+.logo{width:46px;height:46px;border-radius:14px;background:var(--deep);display:grid;place-items:center;font-size:26px}
+.brand h1{font-size:1.7rem;color:var(--deep)}.brand p{margin:0;color:#25543a;font-size:.9rem;font-weight:500}
+.hello{position:relative;max-width:1100px;margin:18px auto 0;font-family:var(--hd);font-weight:700;font-size:1.55rem;color:var(--deep);line-height:1.2;padding:0 100px 0 14px}.hello span{display:block;max-width:520px}
+
+main{max-width:1100px;margin:-62px auto 0;padding:0 14px 110px;display:grid;grid-template-columns:400px 1fr;gap:18px;align-items:start;position:relative}
+@media(max-width:900px){main{grid-template-columns:1fr}.hello{font-size:1.3rem}}
+
+/* form */
+.panel{background:#fff;border-radius:22px;box-shadow:0 10px 30px #0f4d2c24;padding:6px 18px 0}
+.step{padding:16px 0;border-bottom:1px dashed var(--line)}.step:last-of-type{border-bottom:0}
+.step h2{font-size:1.15rem;color:var(--deep);margin-bottom:10px}.step h2 small{font-family:var(--bd);font-weight:400;color:var(--mute);font-size:.82rem;margin-left:6px}
+.field{display:block;width:100%;min-height:50px;padding:10px 14px;border:2px solid var(--line);border-radius:14px;background:#fff;font-size:1rem}
+.field:focus{border-color:var(--leaf)}\n#crop.crop-select{width:100%;min-width:0;min-height:50px;padding:10px 42px 10px 14px;display:block;appearance:auto;-webkit-appearance:menulist;background-color:#fff;cursor:pointer}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.tiles.two{grid-template-columns:1fr 1fr}.tiles.soil{grid-template-columns:1fr 1fr}
+.tile{min-height:66px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:8px 6px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.tile .em{font-size:1.7rem;line-height:1}.tile b{font-size:.9rem;font-weight:700}.tile span.s{font-size:.72rem;color:var(--mute);line-height:1.2}
+.tile.on{border-color:var(--leaf);background:var(--mint);box-shadow:inset 0 0 0 1px var(--leaf)}
+.tile[disabled]{opacity:.4;cursor:not-allowed}
+.tile.ai{grid-column:1/-1;flex-direction:row;gap:10px;background:var(--sunsoft);border-color:#f0d27a}.tile.ai.on{border-color:var(--sun);box-shadow:inset 0 0 0 1px var(--sun)}
+.tile.soilt{flex-direction:row;text-align:left;gap:10px;justify-content:flex-start;padding:8px 10px}.chip{width:30px;height:30px;border-radius:50%;flex:none;border:2px solid #0002}
+.stages{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.moist{display:flex;align-items:center;gap:10px}.moist span{font-size:1.5rem}
+input[type=range]{flex:1;height:34px;accent-color:var(--leaf)}
+.mtxt{margin-top:2px;font-weight:700;color:var(--deep)}
+.drop{display:flex;gap:12px;align-items:center;border:2px dashed #8fc79a;background:var(--mint);border-radius:16px;padding:14px;cursor:pointer}
+.drop .em{font-size:2rem}.drop b{display:block;font-family:var(--hd);font-size:1.05rem;color:var(--deep)}.drop span{font-size:.82rem;color:var(--mute)}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;background:var(--mint);margin:2px 2px 2px 0;font-size:.82rem;font-weight:500}
+#shcmsg{margin-top:8px;font-size:.88rem}
+.nutri{display:grid;grid-template-columns:92px 1fr;align-items:center;gap:8px;margin:8px 0}.nutri b{font-size:.95rem}.nutri small{display:block;font-weight:400;color:var(--mute);font-size:.72rem}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{min-height:44px;border:0;background:#fff;cursor:pointer;font-size:.9rem;font-weight:500}.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--leaf);color:#fff;font-weight:700}
+details.more{margin-top:10px}details summary{cursor:pointer;font-weight:700;color:var(--deep);min-height:44px;display:flex;align-items:center}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.g2 label,.lab{display:block;font-size:.85rem;font-weight:700;margin:8px 0 4px}
+.cta{position:sticky;bottom:0;margin:0 -18px;padding:12px 18px 16px;background:linear-gradient(#fff0,#fff 30%)}
+.go:disabled{opacity:.7;cursor:wait}.go{width:100%;min-height:58px;border:0;border-radius:16px;background:var(--deep);color:#fff;font-family:var(--hd);font-size:1.3rem;font-weight:700;cursor:pointer;box-shadow:0 6px 0 #082f1a}
+.go:active{transform:translateY(3px);box-shadow:0 3px 0 #082f1a}
+
+/* results */
+#out{display:grid;gap:14px}
+.empty{background:#fff;border-radius:22px;padding:30px 22px;text-align:center;box-shadow:0 10px 30px #0f4d2c14}
+.empty .em{font-size:3rem}.empty h2{color:var(--deep);margin:6px 0}.empty p{color:var(--mute);margin:0 auto;max-width:360px}
+.box{background:#fff;border-radius:20px;padding:16px 18px;box-shadow:0 4px 16px #0f4d2c14}
+.box h3{font-size:1.2rem;color:var(--deep);margin-bottom:8px}
+.banner{border-radius:22px;padding:18px;display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center}
+.banner .em{width:64px;height:64px;border-radius:20px;background:#fff9;display:grid;place-items:center;font-size:2.1rem}
+.banner h2{font-size:1.65rem}.banner p{margin:4px 0 0}
+.banner.ok{background:var(--okbg);color:#0e4a24}.banner.warn{background:var(--warnbg);color:#6a4800}.banner.danger{background:var(--badbg);color:#8d2412}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.meta span{font-size:.8rem;background:#fff8;padding:2px 10px;border-radius:99px;font-weight:500}
+.days{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scroll-snap-type:x mandatory}
+.day{flex:0 0 86px;scroll-snap-align:start;text-align:center;background:var(--sky);border-radius:16px;padding:10px 4px}.day.wet{background:#bcd9f2}
+.day b{display:block;font-size:.85rem}.day .ic{font-size:1.8rem;line-height:1.3}.day .t{font-weight:700}.day small{display:block;color:#2b5670;font-size:.75rem}
+.todo{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.todo li{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:start;padding:10px;border-radius:14px;background:var(--okbg)}
+.todo li.warn{background:var(--warnbg)}.todo li.danger{background:var(--badbg)}
+.todo .d{background:#fff;border-radius:10px;text-align:center;font-weight:700;font-size:.8rem;padding:4px 0;line-height:1.2}
+.rank{display:grid;gap:8px}.r{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:14px;border:2px solid var(--line)}
+.r.best{border-color:var(--sun);background:var(--sunsoft)}.r .em{font-size:1.6rem}.r .nm{font-weight:700}
+.r .bar{height:8px;border-radius:99px;background:#e7ece5;margin-top:4px;overflow:hidden}.r .bar i{display:block;height:100%;background:var(--leaf);border-radius:99px}.r.low .bar i{background:#c8b46a}.r.low{opacity:.75}
+.r .rs{font-weight:700;text-align:right;font-size:.95rem}.r .rs small{display:block;font-weight:400;color:var(--mute);font-size:.72rem}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.tri div{background:var(--field);border-radius:14px;padding:10px 6px;text-align:center}.tri small{display:block;color:var(--mute);font-size:.75rem}.tri b{font-family:var(--hd);font-size:1.15rem}
+.badge{display:inline-block;padding:4px 14px;border-radius:99px;font-family:var(--hd);font-size:1.15rem;font-weight:700}.badge.ok{background:var(--okbg);color:#0e4a24}.badge.warn{background:var(--warnbg);color:#6a4800}.badge.danger{background:var(--badbg);color:#8d2412}
+.bags{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}.bag{background:var(--sunsoft);border-radius:14px;padding:10px 4px;text-align:center}.bag .em{font-size:1.5rem}.bag b{display:block;font-family:var(--hd);font-size:1.25rem}.bag small{color:var(--mute)}
+.box ul{margin:6px 0 0;padding-left:20px}.box li{margin:4px 0}.small{font-size:.8rem;color:var(--mute);margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:.85rem}td,th{padding:6px;text-align:center;border-bottom:1px solid var(--line)}
+.spin{text-align:center;padding:36px 10px}.spin .em{font-size:2.6rem;display:inline-block;animation:sway 1.2s ease-in-out infinite}
+@keyframes sway{50%{transform:rotate(14deg)}}@media(prefers-reduced-motion:reduce){.spin .em{animation:none}}
+.err{background:var(--badbg);color:#8d2412;border-radius:18px;padding:16px 18px;font-weight:500}
+
+.language-gate{position:fixed;inset:0;z-index:1000;background:linear-gradient(145deg,#d9eefa,#f1f6ee 65%);display:grid;place-items:center;padding:20px}
+.language-card{width:min(520px,100%);background:#fff;border-radius:24px;padding:26px;box-shadow:0 15px 45px #0f4d2c25;text-align:center}
+.language-card h1{color:var(--deep);font-size:1.8rem}.language-card p{color:var(--mute)}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+.lang-choice{min-height:62px;border:2px solid var(--line);border-radius:14px;background:#fff;font-weight:700;cursor:pointer}
+.lang-choice.selected{border-color:var(--leaf);background:var(--mint)}
+.continue{min-height:54px;width:100%;border:0;border-radius:14px;background:var(--deep);color:white;font-weight:700;cursor:pointer}
+.voice-row{display:flex;gap:8px;margin-top:8px}.voice-btn,.listen-btn{border:0;border-radius:12px;padding:10px 14px;background:var(--sunsoft);font-weight:700;cursor:pointer;min-height:46px}
+.voice-hint{font-size:.8rem;color:var(--mute);margin-top:5px}
+.agent-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.agent-card{border:1px solid var(--line);border-radius:12px;padding:10px;background:#f8fbf7}
+.agent-card b{display:block;color:var(--deep);font-size:.9rem}.agent-card small{color:var(--mute)}
+.online-status{padding:8px 12px;border-radius:12px;background:#e7f2ff;color:#16456b;font-size:.85rem;margin-bottom:10px}
+@media(max-width:500px){.agent-grid{grid-template-columns:1fr}}
+
+/* Farmer registration and dashboard shell */
+.register-gate{position:fixed;inset:0;z-index:900;background:linear-gradient(135deg,#eaf4e8,#f7f8f4);display:grid;place-items:center;padding:18px;overflow:auto}
+.register-card{width:min(760px,100%);background:#fff;border-radius:22px;padding:26px;box-shadow:0 14px 40px #0f4d2c20}
+.register-head{text-align:center;margin-bottom:18px}.register-head .mark{font-size:2.4rem}
+.register-head h1{color:var(--deep);font-size:1.8rem}.register-head p{color:var(--mute);margin:5px 0}
+.register-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.register-grid label{display:block;font-weight:700;font-size:.88rem;margin:0 0 5px}
+.register-grid .wide{grid-column:1/-1}
+.register-actions{display:flex;gap:10px;margin-top:18px}
+.register-actions button{flex:1;min-height:52px;border:0;border-radius:13px;background:var(--deep);color:white;font-weight:700;cursor:pointer}
+.register-error{color:#a52b1d;font-size:.88rem;min-height:1.2em;margin-top:8px}
+.dashboard-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--deep);color:white;padding:13px max(18px,calc((100% - 1100px)/2));}
+.dashboard-nav .brandline{font-family:var(--hd);font-weight:800;font-size:1.25rem}
+.dashboard-nav button{background:transparent;border:1px solid #ffffff99;color:white;border-radius:10px;padding:9px 13px;cursor:pointer}
+.profile-strip{background:#fff;border-radius:16px;padding:13px 16px;margin:0 0 14px;display:flex;justify-content:space-between;gap:10px;align-items:center;box-shadow:0 4px 16px #0f4d2c12}
+.profile-strip strong{color:var(--deep)}.profile-strip small{display:block;color:var(--mute)}
+@media(max-width:600px){.register-grid{grid-template-columns:1fr}.register-grid .wide{grid-column:auto}.register-card{padding:19px}.dashboard-nav{padding:12px 14px}}
+
+/* v6.1 professional registration + farmer dashboard */
+.register-gate{background:radial-gradient(circle at 15% 15%,#d9efdc 0,transparent 35%),linear-gradient(135deg,#f3f8f1,#e8f2e7);}
+.register-card-new{width:min(560px,100%);padding:34px 38px;border:1px solid #e2ebdf;border-radius:24px;box-shadow:0 24px 70px #0f4d2c1c}
+.register-brand{display:flex;align-items:center;gap:16px;text-align:left;margin-bottom:26px}.register-mark{width:66px;height:66px;flex:none;border-radius:20px;background:#e6f3e4;display:grid;place-items:center;font-size:2.25rem}.register-brand .eyebrow{font-size:.68rem;letter-spacing:1.5px;font-weight:800;color:#438151}.register-brand h1{font-size:1.7rem;color:var(--deep);margin:3px 0}.register-brand p{margin:0;color:var(--mute);font-size:.9rem}.register-progress{display:flex;align-items:center;gap:8px;position:relative;margin:8px 0 26px}.progress-dot{width:12px;height:12px;border-radius:50%;background:#d6e4d4}.progress-dot.active{background:#258544;box-shadow:0 0 0 5px #25854420}.progress-line{width:65px;height:2px;background:#d6e4d4}.progress-caption{font-size:.68rem;font-weight:800;letter-spacing:1px;color:#66806b;margin-left:5px}.register-intro h2{font-size:1.25rem;color:#1e3c27}.register-intro p{font-size:.9rem;color:var(--mute);margin:5px 0 18px}.register-fields{display:grid;gap:16px}.register-fields label{font-size:.88rem;font-weight:700;color:#33483a}.register-fields label>span{color:#c23d2b}.register-fields .field{display:block;margin-top:6px}.phone-field{display:flex;align-items:center;gap:8px}.phone-field>span{padding:13px 11px;border:2px solid var(--line);border-radius:14px;background:#f7faf6;font-weight:700;white-space:nowrap}.phone-field .field{flex:1;min-width:0}.register-submit{width:100%;min-height:56px;border:0;border-radius:14px;background:linear-gradient(110deg,#11602e,#2f8f46);color:#fff;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 7px 16px #1c753633}.register-submit span{float:right;font-size:1.3rem;margin-right:8px}.privacy-note{display:flex;gap:9px;align-items:flex-start;font-size:.76rem;color:#657469;margin-top:15px}.register-footer{border-top:1px solid #e7eee4;margin-top:24px;padding-top:15px;text-align:center;color:#7b897e;font-size:.75rem}.register-footer b{color:#326b3f}.register-card-new .register-error{margin:8px 0}.dashboard-nav{height:68px;background:#087b35;padding:0 28px;box-shadow:0 3px 14px #123b211f;position:sticky;top:0;z-index:50}.dashboard-nav .brandline{display:flex;align-items:center;gap:10px;font-size:1.35rem}.dashboard-nav .brandline b{font-weight:600;color:#d7f1d9}.nav-logo{width:38px;height:38px;display:grid;place-items:center;background:#ffffff20;border-radius:12px}.nav-user{display:flex;align-items:center;gap:10px;font-weight:600}.user-avatar{width:34px;height:34px;display:grid;place-items:center;background:#ffffff20;border-radius:50%}.dashboard-nav button{padding:8px 14px;border-radius:9px}.side-nav{position:fixed;left:0;top:68px;bottom:0;width:238px;background:#f0edf4;border-right:1px solid #e3dfe8;padding:25px 14px;z-index:30}.side-label{font-size:.68rem;letter-spacing:1.4px;font-weight:800;color:#8a8491;padding:0 13px 12px}.side-link{display:flex;align-items:center;gap:12px;text-decoration:none;color:#514b58;padding:13px 14px;margin:3px 0;border-radius:10px;font-size:.92rem;font-weight:500}.side-link:hover,.side-link.active{background:#fff;color:#087b35;box-shadow:0 3px 10px #1b30200b}.side-link.active{font-weight:700;border-left:3px solid #159447}.side-link.muted{color:#8b8490}.side-help{position:absolute;left:18px;right:18px;bottom:24px;background:#fff;border-radius:13px;padding:13px;color:#3d5843}.side-help b,.side-help small{display:block}.side-help small{font-size:.75rem;color:#7a877c;margin-top:4px}.hero{display:none!important}#appMain{display:block;grid-template-columns:none;max-width:none;margin:0 0 0 238px;padding:24px 28px 80px;background:#f7f7fa;min-height:calc(100vh - 68px)}.dashboard-content{max-width:1500px;margin:0 auto}.dashboard-tabs{display:grid;grid-template-columns:1fr 1.35fr;gap:0;margin-bottom:20px;border:1px solid #d8d2df;border-radius:13px;overflow:hidden;background:#fff}.dash-tab{min-height:82px;border:0;background:transparent;display:grid;grid-template-columns:32px 1fr;grid-template-rows:1fr 1fr;align-content:center;text-align:left;padding:13px 20px;cursor:pointer;color:#66606d}.dash-tab>span{grid-row:1/3;align-self:center;font-size:1.5rem}.dash-tab b{align-self:end;font-size:1.08rem}.dash-tab small{font-size:.83rem;align-self:start}.dash-tab.selected{background:#087b35;color:#fff}.dashboard-columns{display:grid;grid-template-columns:minmax(480px,1.05fr) minmax(360px,.95fr);gap:18px;align-items:start}.panel{border-radius:15px;padding:0 20px 16px;box-shadow:0 4px 18px #20242c0b;border:1px solid #eceaf0}.profile-section{padding:19px 0 17px;border-bottom:1px solid #eceaf0}.section-heading{display:flex;align-items:center;gap:10px;margin-bottom:14px}.section-heading>span{font-size:1.35rem;color:#6d7880}.section-heading h2{font-family:var(--bd);font-size:1.06rem;color:#303943}.section-heading p{font-size:.78rem;color:#818a91;margin:2px 0 0}.profile-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.profile-fields label,.farm-location-grid label{font-size:.82rem;color:#6b6871;font-weight:600}.profile-fields .field,.farm-location-grid .field{margin-top:5px;min-height:44px;border:1px solid #dedbe4;border-radius:8px;background:#fff}.profile-language{grid-column:1/-1}.profile-buttons{display:flex;gap:10px;margin-top:12px}.profile-buttons button{border-radius:8px;padding:9px 17px;min-height:40px;cursor:pointer;font-weight:600}.save-profile{background:#07823a;color:white;border:1px solid #07823a}.delete-profile{background:white;color:#b64e5a;border:1px solid #d9aab0}.profile-summary{display:block;margin-top:8px;color:#8b9097;font-size:.72rem}.step{padding:17px 0;border-bottom:1px solid #eceaf0}.step h2{font-family:var(--bd);font-size:1.04rem;color:#303943}.step-number{color:#087b35}.step-subtitle{font-size:.78rem;color:#81858d;margin:5px 0 12px}.farm-location-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.farm-extra-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.farm-extra-grid label{font-size:.82rem;color:#6b6871;font-weight:600}.farm-extra-grid .field{margin-top:5px;min-height:44px;border:1px solid #dedbe4;border-radius:8px;background:#fff}.farm-village-label{display:block;font-size:.82rem;font-weight:600;color:#6b6871;margin:10px 0 4px}.farm-village-label+#loc{margin-bottom:6px}.farm-area-field{max-width:100%;margin-top:14px;padding:14px 16px;background:#f1f8f1;border:1px solid #cfe5d0;border-radius:12px}.farm-area-field .farm-village-label{margin:0 0 7px;color:#245b32;font-size:.9rem;font-weight:800}.farm-area-field .field{width:100%;max-width:360px;min-height:48px;border:1.5px solid #a9cfae;font-size:1rem;font-weight:700}.area-help{display:block;margin-top:7px;color:#617568;font-size:.76rem}.area-conversion{display:block;margin-top:4px;color:#087b35;font-size:.8rem;font-weight:700}.field{border-radius:9px}.step .tile{border-radius:10px}.cta{margin:0 -20px;padding:12px 20px 16px}.go{border-radius:10px;background:#087b35;font-size:1.12rem}.box,.empty{border-radius:15px;box-shadow:0 4px 18px #20242c0b}.empty{padding:34px 22px}#out{display:grid;gap:14px;align-content:start}.profile-strip{display:none}
+@media(max-width:1050px){.dashboard-columns{grid-template-columns:1fr}#out{grid-template-columns:1fr 1fr}.side-nav{width:205px}#appMain{margin-left:205px}}
+@media(max-width:700px){.side-nav{display:none!important}.dashboard-nav{padding:0 13px}.dashboard-nav .brandline{font-size:1.05rem}.nav-user{font-size:.8rem}#appMain{margin:0;padding:14px 12px 60px}.dashboard-tabs{grid-template-columns:1fr 1fr}.dash-tab{padding:10px 8px;min-height:80px;grid-template-columns:24px 1fr}.dash-tab b{font-size:.85rem}.dash-tab small{font-size:.7rem}.dashboard-columns{grid-template-columns:1fr}#out{grid-template-columns:1fr}.register-card-new{padding:25px 20px}.register-brand h1{font-size:1.35rem}.profile-fields{grid-template-columns:1fr}.profile-language{grid-column:auto}.farm-location-grid,.farm-extra-grid{grid-template-columns:1fr}}
+
+
+/* v6.8 layout polish: prevent clipped advice cards and remove horizontal page scrolling */
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+#appMain{width:calc(100% - 238px);max-width:none;min-width:0;margin-left:238px;padding-left:clamp(12px,2vw,28px);padding-right:clamp(12px,2vw,28px)}
+.dashboard-content,.dashboard-columns,.panel,#out,.box{min-width:0;max-width:100%}
+.dashboard-columns{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+#out{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+#out .box,#out .banner{min-width:0;max-width:100%;overflow-wrap:anywhere}
+#out .tri,#out .bags{grid-template-columns:repeat(3,minmax(0,1fr));min-width:0}
+#out table{width:100%;min-width:0;table-layout:auto;font-size:.82rem}
+#out th,#out td{padding:6px 5px;overflow-wrap:anywhere}
+#out p,#out li,#out .small{overflow-wrap:anywhere}
+@media(max-width:1200px){.dashboard-columns{grid-template-columns:minmax(0,1fr)}#out{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:700px){#appMain{width:100%;margin-left:0;padding:14px 12px 60px}.dashboard-columns{grid-template-columns:minmax(0,1fr)}.profile-buttons{flex-wrap:wrap}.profile-buttons button{flex:1 1 auto}.dashboard-nav{max-width:100%;box-sizing:border-box}.nav-user{min-width:0;flex-wrap:wrap;justify-content:flex-end}}
+
+</style></head><body><div id="languageGate" class="language-gate" style="display:none"><div class="language-card">
+ <div style="font-size:2.5rem">🌾</div><h1>FarmSaathi AI</h1>
+ <p id="languageIntro">Choose your language to continue</p>
+ <div class="lang-grid">
+  <button class="lang-choice selected" data-lang="en">English</button>
+  <button class="lang-choice" data-lang="hi">हिन्दी</button>
+  <button class="lang-choice" data-lang="kn">ಕನ್ನಡ</button>
+  <button class="lang-choice" data-lang="te">తెలుగు</button>
+ </div><button id="continueBtn" class="continue">Continue →</button>
+</div></div>
+<div id="registerGate" class="register-gate">
+ <form id="registerForm" class="register-card register-card-new" autocomplete="off">
+  <div class="register-brand"><div class="register-mark">🌾</div><div><span class="eyebrow">SMART FARMING • LOCAL GUIDANCE</span><h1>Welcome to FarmSaathi AI</h1><p>Your digital farming companion. Let’s get your profile started.</p></div></div>
+  <div class="register-progress"><span class="progress-dot active"></span><span class="progress-line"></span><span class="progress-dot"></span><span class="progress-caption">STEP 1 OF 2 · FARMER REGISTRATION</span></div>
+  <div class="register-intro"><h2>Tell us who you are</h2><p>Enter your name and mobile number to continue to your farm dashboard.</p></div>
+  <div class="register-fields">
+   <label for="registrationLanguage">Preferred app language <span>*</span><select class="field" id="registrationLanguage" required><option value="en">English</option><option value="hi">हिन्दी (Hindi)</option><option value="kn">ಕನ್ನಡ (Kannada)</option><option value="te">తెలుగు (Telugu)</option></select></label>
+   <label for="regName">Farmer full name <span>*</span><input class="field" id="regName" required maxlength="70" autocomplete="off" autocapitalize="words" placeholder="e.g. Ramesh Kumar"></label>
+   <label for="regPhone">Mobile number <span>*</span><div class="phone-field"><span>🇮🇳 +91</span><input class="field" id="regPhone" type="tel" inputmode="numeric" pattern="[0-9]{10}" minlength="10" maxlength="10" required autocomplete="off" placeholder="Enter 10-digit mobile number"></div></label>
+  </div>
+  <div class="register-error" id="registerError" role="alert"></div>
+  <button class="register-submit" type="submit">Register & continue <span>→</span></button>
+  <div class="privacy-note"><span>🔒</span><span>Your details stay in this browser for this demo. Log out to return here; no OTP or SMS is sent.</span></div>
+  <div class="register-footer">🌱 <b>FarmSaathi AI</b> · Better decisions, healthier farms.</div>
+ </form>
+</div>
+
+<nav class="dashboard-nav" id="dashboardNav" style="display:none"><div class="brandline"><span class="nav-logo">🌾</span><span>FarmSaathi <b>AI</b></span></div><div class="nav-user"><span class="user-avatar">👨‍🌾</span><span id="navFarmerName">Farmer</span><button type="button" id="logoutFarmer" title="Log out and return to registration">Log out</button><button type="button" id="switchFarmer">Switch farmer</button></div></nav>
+<aside class="side-nav" id="sideNav" style="display:none"><div class="side-label">FARM MENU</div><a href="#farmerProfile" class="side-link active">♙ <span>Farmer Profile</span></a><a href="#farmDetails" class="side-link">⌖ <span>Farm Details</span></a><a href="#soilHealth" class="side-link">▱ <span>Soil Health</span></a><a href="#cropPlanning" class="side-link">♧ <span>Crop Planning</span></a><a href="#cultivatedCrops" class="side-link">♧ <span>My Cultivated Crops</span></a><a href="#comingSoon" class="side-link muted">◷ <span>Coming in later stages</span></a><div class="side-help"><b>Need help?</b><small>Use the voice button to tell us about your farm.</small></div></aside>
+<header class="hero" id="appHeader" style="display:none"><div class="sun"></div>
+<svg viewBox="0 0 800 96" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60 Q140 10 300 52 T620 40 T800 56 V96 H0Z" fill="#8bcf8a"/><path d="M0 76 Q180 34 360 72 T800 70 V96 H0Z" fill="#2f8f46"/><path d="M0 90 Q200 62 420 88 T800 86 V96 H0Z" fill="#f1f6ee"/></svg>
+<div class="brand"><div class="logo">🌾</div><div><h1>FarmSaathi</h1><p>Your farming friend</p></div></div>
+<p class="hello"><span>Namaste 🙏 Tell us about your farm. We will tell you what to do next.</span></p></header>
+<main id="appMain" style="display:none">
+<div class="dashboard-content">
+<div class="dashboard-tabs"><button type="button" class="dash-tab selected" id="planTab"><span>💡</span><b>Crop Planning</b><small>I have not sown yet</small></button><button type="button" class="dash-tab" id="growTab"><span>♧</span><b>Existing Crop Management</b><small>I have already sown</small></button></div>
+<div class="dashboard-columns"><form id="f" class="panel" autocomplete="off" novalidate>
+ <section class="profile-section" id="farmerProfile"><div class="section-heading"><span>♙</span><div><h2>1. Farmer Profile</h2><p>Your registration details</p></div></div><div class="profile-fields"><label>Farmer name<input class="field" id="profileName" maxlength="70" autocomplete="name"></label><label>Mobile number<input class="field" id="profilePhone" inputmode="numeric" maxlength="10" autocomplete="tel-national"></label><label class="profile-language">Preferred language<select class="field" id="regLanguage"><option value="en">English</option><option value="hi">हिन्दी</option><option value="kn">ಕನ್ನಡ</option><option value="te">తెలుగు</option></select></label></div><div class="profile-buttons"><button type="button" class="save-profile" id="saveProfile">Save profile</button><button type="button" class="delete-profile" id="deleteProfile">Delete profile</button><button type="button" class="delete-profile" id="switchFarmerInline">Switch farmer</button></div><small class="profile-summary" id="profileSummary">Registered farmer</small></section>
+ <input type="hidden" id="language" value="en">
+ <div class="step" id="farmDetails"><h2><span class="step-number">2.</span> Farm Details</h2><p class="step-subtitle">Fill what you know. Every field is optional, but advice improves with more detail.</p><div class="farm-location-grid">
+ <label>State / Union Territory<select id="farmState" class="field"><option value="">Loading states…</option></select></label>
+ <label>District<select id="farmDistrict" class="field" disabled><option value="">Select state first</option></select></label>
+</div>
+<label class="farm-village-label" for="loc">Village / Town / City</label>
+<select id="loc" class="field" disabled><option value="">Select district first</option></select>
+<small class="area-help" id="locationStatus">Location list is loading from the Local Government Directory-based data service. Internet is required the first time.</small>
+<div class="farm-area-field"><label class="farm-village-label" for="area">🌾 How much land do you have? (in acres) *</label><input id="area" class="field" type="number" step="0.01" min="0.01" max="10000" value="1" required inputmode="decimal" placeholder="Example: 2.5"><small class="area-help">Enter your total farm area. You can use decimals, for example 0.5 acre or 2.5 acres.</small><small class="area-conversion" id="areaConversion">1 acre = 0.405 hectares</small></div>
+<div class="farm-extra-grid">
+ <label>Land ownership<select id="landOwnership" class="field"><option value="">Select ownership</option><option value="Owned">Owned</option><option value="Leased">Leased</option><option value="Shared / family land">Shared / family land</option></select></label>
+ <label>Water / irrigation source<select id="irrigationSource" class="field"><option value="">Select water source</option><option value="Borewell">Borewell</option><option value="Open well">Open well</option><option value="Canal">Canal</option><option value="Rainfed">Rainfed</option><option value="Farm pond">Farm pond</option><option value="Other">Other</option></select></label>
+ <label>Irrigation method<select id="irrigationMethod" class="field"><option value="">Select method</option><option value="Drip">Drip</option><option value="Sprinkler">Sprinkler</option><option value="Flood / furrow">Flood / furrow</option><option value="Manual">Manual</option><option value="Rainfed only">Rainfed only</option></select></label>
+ <label>Previous crop<input id="previousCrop" class="field" placeholder="e.g. Ragi, maize"></label>
+ <label>Season / sowing period<select id="sowingSeason" class="field"><option value="">Select season</option><option value="Kharif">Kharif (Jun–Sep)</option><option value="Rabi">Rabi (Oct–Feb)</option><option value="Summer">Summer (Mar–May)</option></select></label>
+ <label>Farming practice<select id="farmingPractice" class="field"><option value="">Select practice</option><option value="Conventional">Conventional</option><option value="Organic">Organic</option><option value="Natural farming">Natural farming</option><option value="Integrated">Integrated farming</option></select></label>
+</div>
+<div class="voice-row"><button type="button" class="voice-btn" id="voiceBtn">🎤 Speak farm details</button></div><div class="voice-hint" id="voiceHint">You can say your village, crop, soil type and land area.</div></div>
+ <div class="step" id="cropPlanning"><h2><span class="step-number">4.</span> <span data-i18n="status">What is happening on your farm?</span></h2>
+  <select id="status" class="hid"><option value="plan">plan</option><option value="grow">grow</option></select>
+  <div class="tiles two" id="statusTiles">
+   <button type="button" class="tile on" data-v="plan" onclick="document.getElementById('status').value='plan';document.querySelectorAll('#statusTiles .tile').forEach(x=>x.classList.toggle('on',x.dataset.v==='plan'));document.getElementById('stagebox').style.display='none';"><span class="em">🌱</span><b data-i18n="sow">I want to sow</b><span class="s">Suggest the best crop</span></button>
+   <button type="button" class="tile" data-v="grow" onclick="document.getElementById('status').value='grow';document.querySelectorAll('#statusTiles .tile').forEach(x=>x.classList.toggle('on',x.dataset.v==='grow'));document.getElementById('stagebox').style.display='';if(document.getElementById('crop').value==='Auto')document.getElementById('crop').value='Rice';"><span class="em">🌾</span><b data-i18n="grow">Crop is growing</b><span class="s">Tell me what to do</span></button></div></div>
+ <div class="step" id="cultivatedCrops"><h2 data-i18n="crop">Which crop?</h2><select id="crop" class="field crop-select" aria-label="Choose crop"><option value="Auto">Auto (AI choose)</option><option value="Rice">Rice</option><option value="Wheat">Wheat</option><option value="Maize">Maize</option><option value="Tomato">Tomato</option><option value="Cotton">Cotton</option><option value="Sugarcane">Sugarcane</option><option value="Ragi">Ragi</option><option value="Groundnut">Groundnut</option><option value="Soybean">Soybean</option><option value="Chickpea">Chickpea</option><option value="Sorghum">Sorghum</option><option value="Pearl Millet">Pearl Millet</option><option value="Potato">Potato</option><option value="Onion">Onion</option><option value="Chilli">Chilli</option><option value="Banana">Banana</option></select><div class="tiles" id="cropTiles" style="display:none"></div>
+  <div id="stagebox" style="display:none"><div class="lab">How old is the crop?</div><select id="stage" class="hid"></select><div class="stages" id="stageTiles"></div></div></div>
+ <div class="step" id="soilHealth">
+  <h2><span class="step-number">3.</span> <span data-i18n="soil">What is your soil like?</span></h2>
+  <select id="soil" class="hid" aria-label="Selected soil type">
+   <option value="Sandy">Sandy</option><option value="Red">Red</option><option value="Loamy" selected>Loamy</option><option value="Clay">Clay</option><option value="Black">Black</option>
+  </select>
+  <div class="tiles soil" id="soilTiles">
+   <button type="button" class="tile soilt" data-v="Sandy" onclick="document.getElementById('soil').value='Sandy';document.getElementById('soil').dispatchEvent(new Event('change'));document.querySelectorAll('#soilTiles .tile').forEach(x=>x.classList.toggle('on',x.dataset.v==='Sandy'));">
+    <i class="chip" style="background:#e3c98e"></i><div><b>Sandy</b><br><span class="s">Light, water drains fast</span></div>
+   </button>
+   <button type="button" class="tile soilt" data-v="Red" onclick="document.getElementById('soil').value='Red';document.getElementById('soil').dispatchEvent(new Event('change'));document.querySelectorAll('#soilTiles .tile').forEach(x=>x.classList.toggle('on',x.dataset.v==='Red'));">
+    <i class="chip" style="background:#c25a3c"></i><div><b>Red</b><br><span class="s">Reddish, low in humus</span></div>
+   </button>
+   <button type="button" class="tile soilt on" data-v="Loamy" onclick="document.getElementById('soil').value='Loamy';document.getElementById('soil').dispatchEvent(new Event('change'));document.querySelectorAll('#soilTiles .tile').forEach(x=>x.classList.toggle('on',x.dataset.v==='Loamy'));">
+    <i class="chip" style="background:#8b6441"></i><div><b>Loamy</b><br><span class="s">Soft and crumbly, best all-round</span></div>
+   </button>
+   <button type="button" class="tile soilt" data-v="Clay" onclick="document.getElementById('soil').value='Clay';document.getElementById('soil').dispatchEvent(new Event('change'));document.querySelectorAll('#soilTiles .tile').forEach(x=>x.classList.toggle('on',x.dataset.v==='Clay'));">
+    <i class="chip" style="background:#9a8d7c"></i><div><b>Clay</b><br><span class="s">Sticky, holds water</span></div>
+   </button>
+   <button type="button" class="tile soilt" data-v="Black" onclick="document.getElementById('soil').value='Black';document.getElementById('soil').dispatchEvent(new Event('change'));document.querySelectorAll('#soilTiles .tile').forEach(x=>x.classList.toggle('on',x.dataset.v==='Black'));">
+    <i class="chip" style="background:#2f2b29"></i><div><b>Black</b><br><span class="s">Dark, cracks when dry</span></div>
+   </button>
+  </div>
+ </div>
+ <div class="step"><h2 data-i18n="moisture">How wet is the soil today?</h2>
+  <div class="moist"><span>🏜️</span><input id="sm" type="range" min="0" max="100" value="50" aria-label="Soil moisture"><span>💧</span></div>
+  <div class="mtxt"><span id="smt">Moist enough</span> (<b id="smv">50</b>% <span id="waterLeftLabel">water left</span>)</div></div>
+ <div class="step"><h2 data-i18n="card">Soil Health Card</h2>
+  <label class="drop" for="shc"><span class="em">📄</span><div><b id="dropt">Upload your Soil Health Card</b><span>PDF or photo. We read it and fill the boxes for you.</span></div></label>
+  <input type="file" id="shc" class="hid" accept=".pdf,.png,.jpg,.jpeg"><div id="shcmsg"></div>
+  <div style="margin-top:12px">
+   <div class="nutri"><b>Nitrogen<small>N</small></b><div class="seg" data-for="n"><button type="button" data-v="Low" onclick="document.getElementById('n').value='Low';document.querySelectorAll('.seg[data-for=n] button').forEach(x=>x.classList.toggle('on',x.dataset.v==='Low'));">Low</button><button type="button" data-v="Medium" class="on" onclick="document.getElementById('n').value='Medium';document.querySelectorAll('.seg[data-for=n] button').forEach(x=>x.classList.toggle('on',x.dataset.v==='Medium'));">Medium</button><button type="button" data-v="High" onclick="document.getElementById('n').value='High';document.querySelectorAll('.seg[data-for=n] button').forEach(x=>x.classList.toggle('on',x.dataset.v==='High'));">High</button></div></div>
+   <div class="nutri"><b>Phosphorus<small>P</small></b><div class="seg" data-for="p"><button type="button" data-v="Low" onclick="document.getElementById('p').value='Low';document.querySelectorAll('.seg[data-for=p] button').forEach(x=>x.classList.toggle('on',x.dataset.v==='Low'));">Low</button><button type="button" data-v="Medium" class="on" onclick="document.getElementById('p').value='Medium';document.querySelectorAll('.seg[data-for=p] button').forEach(x=>x.classList.toggle('on',x.dataset.v==='Medium'));">Medium</button><button type="button" data-v="High" onclick="document.getElementById('p').value='High';document.querySelectorAll('.seg[data-for=p] button').forEach(x=>x.classList.toggle('on',x.dataset.v==='High'));">High</button></div></div>
+   <div class="nutri"><b>Potash<small>K</small></b><div class="seg" data-for="k"><button type="button" data-v="Low" onclick="document.getElementById('k').value='Low';document.querySelectorAll('.seg[data-for=k] button').forEach(x=>x.classList.toggle('on',x.dataset.v==='Low'));">Low</button><button type="button" data-v="Medium" class="on" onclick="document.getElementById('k').value='Medium';document.querySelectorAll('.seg[data-for=k] button').forEach(x=>x.classList.toggle('on',x.dataset.v==='Medium'));">Medium</button><button type="button" data-v="High" onclick="document.getElementById('k').value='High';document.querySelectorAll('.seg[data-for=k] button').forEach(x=>x.classList.toggle('on',x.dataset.v==='High'));">High</button></div></div>
+   <select id="n" class="hid"><option>Low</option><option selected>Medium</option><option>High</option></select><select id="p" class="hid"><option>Low</option><option selected>Medium</option><option>High</option></select><select id="k" class="hid"><option>Low</option><option selected>Medium</option><option>High</option></select></div>
+  <div class="more"><div class="lab" data-i18n="details" style="margin-top:14px;font-size:1rem;color:var(--deep)">Soil and weather details</div>
+   <div class="g2"><div><label class="lab" for="ph">Soil pH</label><input id="ph" class="field" type="number" step="0.1" min="3" max="10" value="6.5"></div>
+   <div><label class="lab" for="hum">Humidity %</label><input id="hum" class="field" type="number" min="10" max="100" value="65"></div></div>
+   <label class="lab" for="rain">Rain you expect (mm per month)</label><input id="rain" class="field" type="number" min="0" max="600" value="100"></div></div>
+ <div class="step"><h2 data-i18n="land">Your land and price</h2><div class="g2"><div><label class="lab" for="price">Price (₹ per quintal)</label><input id="price" class="field" type="number" min="1"></div></div></div>
+ <div class="cta"><button type="submit" class="go"><span data-i18n="advice">Get my farm advice</span></button></div>
+</form>
+<section id="out"><div class="empty"><div class="em">🌤️</div><h2>Your farm advice will show here</h2><p>Answer the questions and press <b>Get my farm advice</b>. You will see when to water, what to grow, which fertilizer to use and how much you can earn.</p></div></section></div></div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+// FarmSaathi v7.23: bind directly to the advice form. This avoids the
+// document-level capture handler swallowing the submit event before the
+// advice code is ready. The handler is looked up at click time, not bind time.
+window.__farmAdviceSubmitHandler = null;
+const farmAdviceForm = document.getElementById('f');
+if (farmAdviceForm) {
+ farmAdviceForm.addEventListener('submit', function(ev) {
+   ev.preventDefault();
+   ev.stopPropagation();
+   const out = document.getElementById('out');
+   const handler = window.__farmAdviceSubmitHandler;
+   if (typeof handler !== 'function') {
+     if (out) out.innerHTML = '<div class="err">The advice script is not ready. Refresh the page with Ctrl + Shift + R. If this continues, check the browser Console (F12 → Console).</div>';
+     return;
+   }
+   try {
+     Promise.resolve(handler(ev)).catch(function(err) {
+       console.error('FarmSaathi advice submission failed:', err);
+       if (out) out.innerHTML = '<div class="err">Advice could not be displayed. Open F12 → Console and share the red error message.</div>';
+     });
+   } catch (err) {
+     console.error('FarmSaathi advice submission failed:', err);
+     if (out) out.innerHTML = '<div class="err">Advice could not be generated. Open F12 → Console and share the red error message.</div>';
+   }
+ });
+} else {
+ console.error('FarmSaathi: form #f was not found.');
+}
+
+const UI={
+en:{name:"English",speech:"en-IN",intro:"Choose your language to continue",location:"Where is your farm?",status:"What is happening on your farm?",sow:"I want to sow",grow:"Crop is growing",crop:"Which crop?",soil:"What is your soil like?",moisture:"How wet is the soil today?",card:"Soil Health Card",details:"Soil and weather details",land:"Your land and price",advice:"Get my farm advice",voice:"🎤 Speak farm details",hint:"You can say your village, crop, soil type and land area.",weather:"Weather this week",steps:"What to do next",alerts:"Weather risk alerts",crop_rank:"Best crop to grow for profit",profit:"Will it make a profit?",fert:"Fertilizer for one acre",suit:"How well your crop suits this land",why:"Why this advice?",tips:"Crop management tips",forecast:"7-day forecast and soil water",agent_title:"Your AI farm team",listen:"🔊 Listen to advice",offline:"Offline: live weather unavailable; sample weather used."},
+hi:{name:"हिन्दी",speech:"hi-IN",intro:"आगे बढ़ने के लिए अपनी भाषा चुनें",location:"आपका खेत कहाँ है?",status:"आपके खेत में क्या हो रहा है?",sow:"मुझे बोना है",grow:"फसल बढ़ रही है",crop:"कौन सी फसल?",soil:"आपकी मिट्टी कैसी है?",moisture:"आज मिट्टी कितनी गीली है?",card:"मृदा स्वास्थ्य कार्ड",details:"मिट्टी और मौसम का विवरण",land:"आपकी जमीन और कीमत",advice:"मेरे खेत की सलाह पाएं",voice:"🎤 खेत का विवरण बोलें",hint:"गाँव, फसल, मिट्टी और जमीन का क्षेत्रफल बोलें।",weather:"इस सप्ताह का मौसम",steps:"आगे क्या करें",alerts:"मौसम जोखिम चेतावनी",crop_rank:"लाभ के लिए सबसे अच्छी फसल",profit:"क्या लाभ होगा?",fert:"एक एकड़ के लिए खाद",suit:"फसल और जमीन का मेल",why:"यह सलाह क्यों?",tips:"फसल प्रबंधन सुझाव",forecast:"7 दिन का मौसम और मिट्टी का पानी",agent_title:"आपकी AI खेती टीम",listen:"🔊 सलाह सुनें",offline:"ऑफ़लाइन: लाइव मौसम उपलब्ध नहीं; नमूना मौसम उपयोग हो रहा है।"},
+kn:{name:"ಕನ್ನಡ",speech:"kn-IN",intro:"ಮುಂದುವರಿಯಲು ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ",location:"ನಿಮ್ಮ ಹೊಲ ಎಲ್ಲಿದೆ?",status:"ನಿಮ್ಮ ಹೊಲದಲ್ಲಿ ಏನು ನಡೆಯುತ್ತಿದೆ?",sow:"ನಾನು ಬಿತ್ತಬೇಕು",grow:"ಬೆಳೆ ಬೆಳೆಯುತ್ತಿದೆ",crop:"ಯಾವ ಬೆಳೆ?",soil:"ನಿಮ್ಮ ಮಣ್ಣು ಹೇಗಿದೆ?",moisture:"ಇಂದು ಮಣ್ಣಿನಲ್ಲಿ ಎಷ್ಟು ತೇವವಿದೆ?",card:"ಮಣ್ಣು ಆರೋಗ್ಯ ಕಾರ್ಡ್",details:"ಮಣ್ಣು ಮತ್ತು ಹವಾಮಾನ ವಿವರಗಳು",land:"ನಿಮ್ಮ ಜಮೀನು ಮತ್ತು ಬೆಲೆ",advice:"ನನ್ನ ಹೊಲದ ಸಲಹೆ ಪಡೆಯಿರಿ",voice:"🎤 ಹೊಲದ ವಿವರ ಮಾತನಾಡಿ",hint:"ಹಳ್ಳಿ, ಬೆಳೆ, ಮಣ್ಣು ಮತ್ತು ಜಮೀನಿನ ವಿಸ್ತೀರ್ಣ ಹೇಳಿ.",weather:"ಈ ವಾರದ ಹವಾಮಾನ",steps:"ಮುಂದೆ ಏನು ಮಾಡಬೇಕು",alerts:"ಹವಾಮಾನ ಅಪಾಯ ಎಚ್ಚರಿಕೆ",crop_rank:"ಲಾಭಕ್ಕಾಗಿ ಉತ್ತಮ ಬೆಳೆ",profit:"ಲಾಭವಾಗುತ್ತದೆಯೇ?",fert:"ಒಂದು ಎಕರೆಗೆ ಗೊಬ್ಬರ",suit:"ಬೆಳೆ ಮತ್ತು ಭೂಮಿಯ ಹೊಂದಾಣಿಕೆ",why:"ಈ ಸಲಹೆ ಏಕೆ?",tips:"ಬೆಳೆ ನಿರ್ವಹಣೆ ಸಲಹೆಗಳು",forecast:"7 ದಿನಗಳ ಹವಾಮಾನ ಮತ್ತು ಮಣ್ಣಿನ ನೀರು",agent_title:"ನಿಮ್ಮ AI ಕೃಷಿ ತಂಡ",listen:"🔊 ಸಲಹೆ ಕೇಳಿ",offline:"ಆಫ್‌ಲೈನ್: ನೇರ ಹವಾಮಾನ ಇಲ್ಲ; ಮಾದರಿ ಹವಾಮಾನ ಬಳಸಲಾಗುತ್ತಿದೆ."},
+te:{name:"తెలుగు",speech:"te-IN",intro:"కొనసాగడానికి భాషను ఎంచుకోండి",location:"మీ పొలం ఎక్కడ ఉంది?",status:"మీ పొలంలో ఏమి జరుగుతోంది?",sow:"నేను విత్తాలి",grow:"పంట పెరుగుతోంది",crop:"ఏ పంట?",soil:"మీ నేల ఎలా ఉంది?",moisture:"ఈ రోజు నేలలో ఎంత తేమ ఉంది?",card:"సాయిల్ హెల్త్ కార్డ్",details:"నేల మరియు వాతావరణ వివరాలు",land:"మీ భూమి మరియు ధర",advice:"నా పొలం సలహా పొందండి",voice:"🎤 పొలం వివరాలు మాట్లాడండి",hint:"గ్రామం, పంట, నేల, భూమి విస్తీర్ణం చెప్పండి.",weather:"ఈ వారం వాతావరణం",steps:"తర్వాత ఏమి చేయాలి",alerts:"వాతావరణ ప్రమాద హెచ్చరికలు",crop_rank:"లాభం కోసం ఉత్తమ పంట",profit:"లాభం వస్తుందా?",fert:"ఒక ఎకరాకు ఎరువు",suit:"పంట మరియు నేల అనుకూలత",why:"ఈ సలహా ఎందుకు?",tips:"పంట నిర్వహణ చిట్కాలు",forecast:"7 రోజుల వాతావరణం మరియు నేల నీరు",agent_title:"మీ AI వ్యవసాయ బృందం",listen:"🔊 సలహా వినండి",offline:"ఆఫ్‌లైన్: ప్రత్యక్ష వాతావరణం లేదు; నమూనా వాతావరణం ఉపయోగిస్తున్నారు."}
+};
+let selectedLanguage="en",lastAdviceText="";
+function updateAreaConversion(){const a=Number($('area').value);const unit=selectedLanguage==='te'?'ఎకరాలు':selectedLanguage==='hi'?'एकड़':selectedLanguage==='kn'?'ಎಕರೆ':'acre(s)';const hectare=selectedLanguage==='te'?'హెక్టార్లు':selectedLanguage==='hi'?'हेक्टेयर':selectedLanguage==='kn'?'ಹೆಕ್ಟೇರ್':'hectares';const invalid=selectedLanguage==='te'?'0 కంటే ఎక్కువ భూమి విస్తీర్ణం నమోదు చేయండి.':selectedLanguage==='hi'?'0 से अधिक भूमि क्षेत्र दर्ज करें।':selectedLanguage==='kn'?'0 ಕ್ಕಿಂತ ಹೆಚ್ಚು ಭೂಮಿಯ ವಿಸ್ತೀರ್ಣ ನಮೂದಿಸಿ.':'Enter a land area greater than 0 acres.';$('areaConversion').textContent=(Number.isFinite(a)&&a>0)?`${a.toLocaleString(undefined,{maximumFractionDigits:2})} ${unit} ≈ ${(a*0.404686).toFixed(3)} ${hectare}`:invalid;}
+$('area').addEventListener('input',updateAreaConversion);
+updateAreaConversion();
+
+// India-wide cascading location dropdowns (LGD-derived public data).
+const LGD_API='https://india-lgd-index-api.vercel.app/v1';
+const CITY_API='https://lgd-json-api.vercel.app/api';
+let locationStates=[], locationDistricts=[], locationPlaces=[];
+function setSelectOptions(el, rows, placeholder, valueKey='name', labelKey='name'){
+ el.innerHTML='';
+ const first=document.createElement('option');first.value='';first.textContent=({en:{'Select state / UT':'Select state / UT','Select district':'Select district','Select village / town / city':'Select village / town / city'},hi:{'Select state / UT':'राज्य / केंद्र शासित प्रदेश चुनें','Select district':'ज़िला चुनें','Select village / town / city':'गाँव / कस्बा / शहर चुनें'},kn:{'Select state / UT':'ರಾಜ್ಯ / ಕೇಂದ್ರಾಡಳಿತ ಪ್ರದೇಶ ಆಯ್ಕೆಮಾಡಿ','Select district':'ಜಿಲ್ಲೆ ಆಯ್ಕೆಮಾಡಿ','Select village / town / city':'ಗ್ರಾಮ / ಪಟ್ಟಣ / ನಗರ ಆಯ್ಕೆಮಾಡಿ'},te:{'Select state / UT':'రాష్ట్రం / కేంద్రపాలిత ప్రాంతాన్ని ఎంచుకోండి','Select district':'జిల్లాను ఎంచుకోండి','Select village / town / city':'గ్రామం / పట్టణం / నగరాన్ని ఎంచుకోండి'}}[selectedLanguage]||{})[placeholder]||placeholder;el.appendChild(first);
+ rows.forEach(row=>{const o=document.createElement('option');o.value=String(row[valueKey]??row.name??'');o.textContent=String(row[labelKey]??row.name??'');el.appendChild(o)});
+}
+async function getJson(url){
+ const response=await fetch(url,{headers:{'Accept':'application/json'}});
+ if(!response.ok) throw new Error('Location service returned '+response.status);
+ return await response.json();
+}
+function rowsFrom(payload){
+ if(Array.isArray(payload))return payload;
+ if(Array.isArray(payload?.data))return payload.data;
+ if(Array.isArray(payload?.results))return payload.results;
+ if(Array.isArray(payload?.data?.results))return payload.data.results;
+ return [];
+}
+async function loadIndiaStates(selectedName='',selectedDistrict='',selectedPlace=''){
+ const state=$('farmState'),district=$('farmDistrict'),place=$('loc'),status=$('locationStatus');
+ state.disabled=true;state.innerHTML='<option value="">Loading states…</option>';
+ try{
+  let stateRows=[];
+  try{
+   const data=await getJson(LGD_API+'/states');
+   stateRows=rowsFrom(data);
+  }catch(primaryError){
+   stateRows=await pagedCityLookup('states',{});
+  }
+  locationStates=stateRows.sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+  setSelectOptions(state,locationStates,'Select state / UT','code','name');
+  state.disabled=false;
+  if(selectedName){
+   const found=locationStates.find(x=>String(x.name).toLowerCase()===String(selectedName).toLowerCase());
+   if(found){state.value=String(found.code);await loadDistricts(found.code,selectedDistrict,selectedPlace);}
+  }
+  if(status)status.textContent='Choose a state, then district, then village/town/city. Lists are based on LGD-derived public administrative data.';
+ }catch(err){
+  state.innerHTML='<option value="">Could not load states</option>';state.disabled=false;
+  if(status)status.textContent='Could not load the location list. Check your internet connection and refresh the page.';
+ }
+ district.disabled=true;place.disabled=true;
+}
+async function loadDistricts(stateCode,selectedName='',selectedPlace=''){
+ const district=$('farmDistrict'),place=$('loc'),status=$('locationStatus');
+ district.disabled=true;place.disabled=true;
+ setSelectOptions(district,[],'Loading districts…');setSelectOptions(place,[],'Select district first');
+ try{
+  let districtRows=[];
+  try{
+   const data=await getJson(LGD_API+'/districts?state='+encodeURIComponent(stateCode));
+   districtRows=rowsFrom(data);
+  }catch(primaryError){
+   // Secondary LGD-derived service uses stateCode, not state.
+   districtRows=await pagedCityLookup('districts',{stateCode:String(stateCode)});
+  }
+  locationDistricts=districtRows.sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+  setSelectOptions(district,locationDistricts,'Select district','code','name');district.disabled=false;
+  if(selectedName){
+   const found=locationDistricts.find(x=>String(x.name).toLowerCase()===String(selectedName).toLowerCase());
+   if(found){district.value=String(found.code);await loadPlaces(stateCode,found.code,selectedPlace);}
+  }
+  if(status)status.textContent=locationDistricts.length?'Districts loaded. Select your district to load its villages, towns and cities.':'No districts were returned for this state. Please try again later.';
+ }catch(err){
+  setSelectOptions(district,[],'District list unavailable');district.disabled=false;
+  if(status)status.textContent='Districts could not be loaded. Please retry after checking your internet connection.';
+ }
+}
+function normalizePlaceRows(payload){
+ const rows=rowsFrom(payload);
+ return rows.map(x=>({
+  code:x.code??x.villageCode??x.cityCode??x.id??x.lgdCode??x.name,
+  name:x.name??x.villageName??x.cityName??x.localBodyName??x.townName??x.subdistrict_name??x.subdistrictName,
+  district_code:x.district_code??x.districtCode??x.district?.code,
+  state_code:x.state_code??x.stateCode
+ })).filter(x=>x.name);
+}
+async function pagedCityLookup(path,params){
+ let out=[];
+ for(let page=1;page<=30;page++){
+  const query=new URLSearchParams({...params,page:String(page),limit:'100'});
+  const payload=await getJson(CITY_API+'/'+path+'?'+query.toString());
+  const rows=normalizePlaceRows(payload);out.push(...rows);
+  const pagination=payload.pagination||payload.meta?.pagination||{};
+  const totalPages=Number(pagination.totalPages||pagination.pages||0);
+  if((totalPages&&page>=totalPages)||rows.length<100)break;
+ }
+ return out;
+}
+async function loadPlaces(stateCode,districtCode,selectedName=''){
+ const place=$('loc'),status=$('locationStatus');
+ place.disabled=true;setSelectOptions(place,[],'Loading villages / towns / cities…');
+ let rows=[];
+ // Prefer revenue-village records. The public cities API supplies urban local bodies as fallback.
+ try{rows=await pagedCityLookup('villages',{districtCode:String(districtCode)});}catch(e){}
+ if(!rows.length){
+  try{rows=await pagedCityLookup('cities',{stateCode:String(stateCode)});rows=rows.filter(x=>!x.district_code||String(x.district_code)===String(districtCode));}catch(e){}
+ }
+ if(!rows.length){
+  // Final administrative fallback: official LGD sub-districts (taluks/tehsils/mandals).
+  try{
+   const data=await getJson(LGD_API+'/subdistricts?district='+encodeURIComponent(districtCode));
+   rows=rowsFrom(data).map(x=>({code:x.code,name:x.name}));
+   if(status)status.textContent='Village/city records were unavailable for this district. Showing its official sub-districts (taluks/tehsils) as a location fallback.';
+  }catch(e){}
+ }
+ const unique=new Map();rows.forEach(x=>{if(x.name)unique.set(String(x.code||x.name),x)});
+ locationPlaces=[...unique.values()].sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+ setSelectOptions(place,locationPlaces,locationPlaces.length?'Select village / town / city':'No places available','code','name');
+ place.disabled=false;
+ if(selectedName){const found=locationPlaces.find(x=>String(x.name).toLowerCase()===String(selectedName).toLowerCase());if(found)place.value=String(found.code||found.name);}
+ if(status&&locationPlaces.length)status.textContent='Loaded '+locationPlaces.length+' location options. Data is based on LGD-derived public administrative listings; local names may vary.';
+}
+$('farmState').addEventListener('change',async e=>{
+ const code=e.target.value;setSelectOptions($('farmDistrict'),[],'Select state first');$('farmDistrict').disabled=true;setSelectOptions($('loc'),[],'Select district first');$('loc').disabled=true;
+ if(code)await loadDistricts(code);
+});
+$('farmDistrict').addEventListener('change',async e=>{
+ const stateCode=$('farmState').value,districtCode=e.target.value;
+ setSelectOptions($('loc'),[],'Select district first');$('loc').disabled=true;
+ if(stateCode&&districtCode)await loadPlaces(stateCode,districtCode);
+});
+
+function showDashboard(profile){
+ $('registerGate').style.display='none';$('languageGate').style.display='none';
+ $('dashboardNav').style.display='flex';$('sideNav').style.display='block';$('appHeader').style.display='none';$('appMain').style.display='block';
+ $('navFarmerName').textContent=profile.name;
+ $('profileName').value=profile.name;$('profilePhone').value=profile.phone||'';
+ $('profileSummary').textContent=`${profile.name} · ${profile.phone}`;
+ $('regLanguage').value=profile.language||'en';$('registrationLanguage').value=profile.language||'en';selectedLanguage=profile.language||'en';
+ $('area').value=profile.area||1;
+ loadIndiaStates(profile.state||'',profile.district||'',profile.village||'');
+ ['landOwnership','irrigationSource','irrigationMethod','previousCrop','sowingSeason','farmingPractice'].forEach(id=>{if($(id))$(id).value=profile[id]||''});
+ applyLanguage(profile.language||'en');
+}
+function openRegistration(){
+ $('appHeader').style.display='none';$('appMain').style.display='none';$('dashboardNav').style.display='none';$('sideNav').style.display='none';
+ // Always start with empty identity fields. Farmers enter their own details each time.
+ $('regName').value='';$('regPhone').value='';
+ $('registerGate').style.display='grid';$('registerError').textContent='';
+}
+function persistProfile(){
+ let p={};try{p=JSON.parse(localStorage.getItem('farmsaathi_farmer_profile')||'{}')}catch(e){}
+ p.name=$('profileName').value.trim();p.phone=$('profilePhone').value.trim();p.language=$('regLanguage').value;selectedLanguage=p.language;
+ if(!p.name){alert(localizedMessage('nameRequired','Please enter the farmer name.'));return} if(!/^[0-9]{10}$/.test(p.phone)){alert(localizedMessage('phoneRequired','Please enter a valid 10-digit mobile number.'));return}
+ p.state=$('farmState').value.trim();p.district=$('farmDistrict').value.trim();p.village=$('loc').value.trim();p.area=Number($('area').value)||1;
+ const st=locationStates.find(x=>String(x.code)===String($('farmState').value));
+ const dt=locationDistricts.find(x=>String(x.code)===String($('farmDistrict').value));
+ const pl=locationPlaces.find(x=>String(x.code||x.name)===String($('loc').value));
+ p.state=st?.name||'';p.district=dt?.name||'';p.village=pl?.name||'';
+ p.stateCode=st?.code||'';p.districtCode=dt?.code||'';p.villageCode=pl?.code||'';
+ ['landOwnership','irrigationSource','irrigationMethod','previousCrop','sowingSeason','farmingPractice'].forEach(id=>{p[id]=$(id).value.trim()});
+ try{localStorage.setItem('farmsaathi_farmer_profile',JSON.stringify(p))}catch(e){}
+ $('profileSummary').textContent=`${p.name} · ${p.phone}`;$('navFarmerName').textContent=p.name;applyLanguage(p.language);
+}
+$('registerForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const name=$('regName').value.trim(),phone=$('regPhone').value.trim();
+ if(!name){$('registerError').textContent=localizedMessage('fullNameRequired','Please enter your full name.');return}
+ if(!/^[0-9]{10}$/.test(phone)){$('registerError').textContent=localizedMessage('phoneRequired','Please enter a valid 10-digit mobile number.');return}
+ // If the same farmer returns after logout, restore their saved farm details.
+ let existing=null;try{existing=JSON.parse(localStorage.getItem('farmsaathi_farmer_profile')||'null')}catch(err){}
+ const p=(existing&&existing.phone===phone&&existing.name.toLowerCase()===name.toLowerCase())
+   ? existing : {name,phone,language:$('registrationLanguage').value,state:'',district:'',village:'',area:1};
+ p.name=name;p.phone=phone;p.language=$('registrationLanguage').value;
+ try{localStorage.setItem('farmsaathi_farmer_profile',JSON.stringify(p));sessionStorage.setItem('farmsaathi_active_session','1')}catch(err){}
+ $('language').value=p.language;showDashboard(p);
+});
+function logoutFarmer(){
+ if(!confirm(localizedMessage('logoutConfirm','Log out of FarmSaathi AI? You will return to the registration screen. Your saved farm profile and farm details will remain on this browser for your next visit.')))return;
+ try{sessionStorage.removeItem('farmsaathi_active_session')}catch(e){}
+ $('regName').value='';$('regPhone').value='';
+ openRegistration();
+}
+function switchFarmer(){
+ try{localStorage.removeItem('farmsaathi_farmer_profile');sessionStorage.removeItem('farmsaathi_active_session')}catch(e){}
+ $('regName').value='';$('regPhone').value='';openRegistration();
+}
+$('registrationLanguage').addEventListener('change',e=>{ $('language').value=e.target.value; applyLanguage(e.target.value); });
+$('logoutFarmer').onclick=logoutFarmer;
+$('switchFarmer').onclick=switchFarmer;$('switchFarmerInline').onclick=switchFarmer;
+$('saveProfile').onclick=persistProfile;
+function deleteProfile(){
+ if(!confirm(localizedMessage('deleteConfirm','Delete this farmer profile from this browser? This will remove the saved profile and cached advice. This action cannot be undone.')))return;
+ try{localStorage.removeItem('farmsaathi_farmer_profile');localStorage.removeItem('farmsaathi_last_advice');sessionStorage.removeItem('farmsaathi_active_session')}catch(e){}
+ $('regName').value='';$('regPhone').value='';
+ $('out').innerHTML='<div class="empty"><div class="em">🌱</div><h2>Welcome to FarmSaathi AI</h2><p>Register a farmer to begin.</p></div>';
+ openRegistration();
+}
+$('deleteProfile').onclick=deleteProfile;
+$('regLanguage').addEventListener('change',()=>{let p={};try{p=JSON.parse(localStorage.getItem('farmsaathi_farmer_profile')||'{}')}catch(e){}p.language=$('regLanguage').value;try{localStorage.setItem('farmsaathi_farmer_profile',JSON.stringify(p))}catch(e){}applyLanguage(p.language);});
+$('planTab').onclick=()=>{pick('status','plan');$('planTab').classList.add('selected');$('growTab').classList.remove('selected')};
+$('growTab').onclick=()=>{pick('status','grow');$('growTab').classList.add('selected');$('planTab').classList.remove('selected')};
+$('sideNav').querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{$('sideNav').querySelectorAll('a').forEach(x=>x.classList.remove('active'));a.classList.add('active')}));
+
+
+const EXTRA_UI={
+ te:{logout:"లాగ్ అవుట్",switchFarmer:"రైతును మార్చండి",farmMenu:"వ్యవసాయ మెను",farmerProfile:"రైతు ప్రొఫైల్",farmDetails:"పొలం వివరాలు",soilHealth:"నేల ఆరోగ్యం",cropPlanning:"పంట ప్రణాళిక",myCrops:"నేను సాగు చేస్తున్న పంటలు",comingLater:"తర్వాతి దశల్లో వస్తుంది",needHelp:"సహాయం కావాలా?",voiceHelp:"మీ పొలం గురించి చెప్పడానికి వాయిస్ బటన్ ఉపయోగించండి.",profileHeading:"1. రైతు ప్రొఫైల్",registrationDetails:"మీ నమోదు వివరాలు",farmerName:"రైతు పేరు",mobile:"మొబైల్ నంబర్",preferredLanguage:"ఇష్టమైన భాష",saveProfile:"ప్రొఫైల్ సేవ్ చేయండి",deleteProfile:"ప్రొఫైల్ తొలగించండి",farmHeading:"2. పొలం వివరాలు",farmHint:"మీకు తెలిసిన వివరాలు నమోదు చేయండి. ప్రతి వివరమూ ఐచ్ఛికం; ఎక్కువ వివరాలు ఇస్తే సలహా మెరుగవుతుంది.",state:"రాష్ట్రం / కేంద్రపాలిత ప్రాంతం",district:"జిల్లా",village:"గ్రామం / పట్టణం / నగరం",landArea:"మీకు ఎంత భూమి ఉంది? (ఎకరాల్లో)",ownership:"భూమి యాజమాన్యం",waterSource:"నీటి / నీటిపారుదల వనరు",irrigationMethod:"నీటిపారుదల విధానం",previousCrop:"మునుపటి పంట",season:"సీజన్ / విత్తే కాలం",practice:"వ్యవసాయ పద్ధతి",speakDetails:"పొలం వివరాలు మాట్లాడండి",soilDetails:"నేల మరియు వాతావరణ వివరాలు",soilPH:"నేల pH",humidity:"తేమ %",rain:"మీరు ఆశిస్తున్న వర్షం (నెలకు మి.మీ.)",landPrice:"మీ భూమి మరియు ధర",price:"ధర (క్వింటాల్‌కు ₹)",getAdvice:"నా పొలం సలహా పొందండి",planTab:"పంట ప్రణాళిక",notSown:"ఇంకా విత్తలేదు",growTab:"ఇప్పటికే వేసిన పంట నిర్వహణ",alreadySown:"ఇప్పటికే విత్తాను",emptyTitle:"మీ పొలం సలహా ఇక్కడ కనిపిస్తుంది",emptyText:"ప్రశ్నలకు సమాధానమిచ్చి ‘నా పొలం సలహా పొందండి’ నొక్కండి. ఎప్పుడు నీరు పెట్టాలి, ఏమి పండించాలి, ఏ ఎరువు వాడాలి, ఎంత ఆదాయం రావచ్చో తెలుసుకోండి.",weatherRisk:"వాతావరణ ప్రమాద హెచ్చరికలు",bestCrop:"లాభం కోసం ఉత్తమ పంట",profit:"లాభం వస్తుందా?",fertilizer:"ఒక ఎకరానికి ఎరువు",cropSuit:"ఈ భూమికి మీ పంట ఎంత అనుకూలం?",whyAdvice:"ఈ సలహా ఎందుకు?",cropTips:"పంట నిర్వహణ చిట్కాలు",forecast:"7 రోజుల వాతావరణం మరియు నేలలోని నీరు",listen:"సలహా వినండి",income:"ఆదాయం",cost:"ఖర్చు",profitLabel:"లాభం",returnCost:"ఖర్చుపై రాబడి",nutrientTarget:"పోషకాల లక్ష్యం",approxCost:"సుమారు ఖర్చు",guideline:"ఇది మార్గదర్శకం మాత్రమే. మోతాదులను స్థానిక వ్యవసాయ కార్యాలయంలో నిర్ధారించండి.",liveWeather:"ప్రత్యక్ష వాతావరణం",demoWeather:"నమూనా వాతావరణం",cropRankHint:"మీ నేల, నేల పరీక్ష, వాతావరణం, సీజన్ మరియు సాధారణ ధరలను ఉపయోగిస్తుంది (ఎకరానికి).",samplePrice:"ధరలు, దిగుబడులు మరియు అనుకూలత స్కోర్లు నమూనా విలువలు. స్థానిక మార్కెట్ మరియు వ్యవసాయ కార్యాలయంలో నిర్ధారించండి.",sampleProfit:"దిగుబడి, ఖర్చు మరియు ధరలు నమూనా విలువలు. MSP, Agmarknet లేదా స్థానిక సమాచారంతో నవీకరించండి.",weatherLoading:"మీ పొలం వాతావరణాన్ని పరిశీలిస్తోంది…",voiceHint:"మీ గ్రామం, పంట, నేల రకం మరియు భూమి విస్తీర్ణం చెప్పవచ్చు.",acreHelp:"మీ మొత్తం భూమి విస్తీర్ణాన్ని నమోదు చేయండి. 0.5 లేదా 2.5 వంటి దశాంశాలను ఉపయోగించవచ్చు.",selectState:"ముందుగా రాష్ట్రాన్ని ఎంచుకోండి",selectDistrict:"ముందుగా జిల్లాను ఎంచుకోండి",selectOwnership:"యాజమాన్యాన్ని ఎంచుకోండి",selectWater:"నీటి వనరును ఎంచుకోండి",selectMethod:"విధానాన్ని ఎంచుకోండి",selectSeason:"సీజన్ ఎంచుకోండి",selectPractice:"వ్యవసాయ పద్ధతిని ఎంచుకోండి",owned:"సొంతం",leased:"కౌలుకు",shared:"ఉమ్మడి / కుటుంబ భూమి",borewell:"బోర్‌వెల్",openWell:"బావి",canal:"కాలువ",rainfed:"వర్షాధారం",farmPond:"వ్యవసాయ చెరువు",other:"ఇతర",drip:"డ్రిప్",sprinkler:"స్ప్రింక్లర్",flood:"మడక / కాలువ పద్ధతి",manual:"మాన్యువల్",conventional:"సాధారణ",organic:"సేంద్రియ",natural:"సహజ వ్యవసాయం",integrated:"సమగ్ర వ్యవసాయం",kharif:"ఖరీఫ్ (జూన్–సెప్టెంబర్)",rabi:"రబీ (అక్టోబర్–ఫిబ్రవరి)",summer:"వేసవి (మార్చి–మే)",noWeatherRisk:"రాబోయే 7 రోజుల్లో పెద్ద వాతావరణ ప్రమాదాలు లేవు.",priceSample:"ధరలు, దిగుబడులు మరియు అనుకూలత స్కోర్లు నమూనా విలువలు. స్థానిక మార్కెట్ మరియు వ్యవసాయ కార్యాలయంలో నిర్ధారించండి.",profitSample:"దిగుబడి, ఖర్చు మరియు ధరలు నమూనా విలువలు. MSP, Agmarknet లేదా స్థానిక సమాచారంతో నవీకరించండి.",careFor:"మీ పంట సంరక్షణ",poorFit:"(తక్కువ అనుకూలత)",fit:"అనుకూలత",perHectare:"కిలోలు ప్రతి హెక్టారుకు, మీ నేల పరీక్ష ప్రకారం సర్దుబాటు.",perAcre:"ప్రతి ఎకరానికి",priceFalls:"ధర 20% తగ్గితే లాభం",priceRises:"ధర 20% పెరిగితే లాభం",accuracy:"మోడల్ ఖచ్చితత్వం",sampleAccuracy:"నమూనా శిక్షణ డేటాపై ఉంది. ఖచ్చితత్వాన్ని చెప్పే ముందు నిజమైన డేటాతో మళ్లీ శిక్షణ ఇవ్వండి."},
+ hi:{logout:"लॉग आउट",switchFarmer:"किसान बदलें",farmMenu:"खेती मेनू",farmerProfile:"किसान प्रोफ़ाइल",farmDetails:"खेत का विवरण",soilHealth:"मिट्टी का स्वास्थ्य",cropPlanning:"फसल योजना",myCrops:"मेरी उगाई फसलें",comingLater:"अगले चरणों में आएगा",needHelp:"मदद चाहिए?",voiceHelp:"अपने खेत के बारे में बताने के लिए वॉइस बटन दबाएँ।",profileHeading:"1. किसान प्रोफ़ाइल",registrationDetails:"आपका पंजीकरण विवरण",farmerName:"किसान का नाम",mobile:"मोबाइल नंबर",preferredLanguage:"पसंदीदा भाषा",saveProfile:"प्रोफ़ाइल सहेजें",deleteProfile:"प्रोफ़ाइल हटाएँ",farmHeading:"2. खेत का विवरण",farmHint:"जो जानकारी पता है वह भरें। सभी फ़ील्ड वैकल्पिक हैं; अधिक जानकारी से सलाह बेहतर होगी।",state:"राज्य / केंद्र शासित प्रदेश",district:"ज़िला",village:"गाँव / कस्बा / शहर",landArea:"आपके पास कितनी भूमि है? (एकड़ में)",ownership:"भूमि का स्वामित्व",waterSource:"पानी / सिंचाई का स्रोत",irrigationMethod:"सिंचाई का तरीका",previousCrop:"पिछली फसल",season:"मौसम / बुवाई अवधि",practice:"खेती का तरीका",speakDetails:"खेत का विवरण बोलें",soilDetails:"मिट्टी और मौसम का विवरण",soilPH:"मिट्टी pH",humidity:"नमी %",rain:"अपेक्षित बारिश (मिमी प्रति माह)",landPrice:"आपकी भूमि और कीमत",price:"कीमत (₹ प्रति क्विंटल)",getAdvice:"मेरे खेत की सलाह दें",planTab:"फसल योजना",notSown:"अभी बुवाई नहीं की",growTab:"मौजूदा फसल प्रबंधन",alreadySown:"बुवाई कर दी है",emptyTitle:"आपके खेत की सलाह यहाँ दिखेगी",emptyText:"प्रश्नों के उत्तर दें और ‘मेरे खेत की सलाह दें’ दबाएँ। आपको पानी देने का समय, कौन सी फसल उगाएँ और कौन सा उर्वरक उपयोग करें, यह पता चलेगा।",weatherRisk:"मौसम जोखिम चेतावनी",bestCrop:"लाभ के लिए सबसे अच्छी फसल",profit:"क्या लाभ होगा?",fertilizer:"एक एकड़ के लिए उर्वरक",cropSuit:"यह फसल इस भूमि के लिए कितनी उपयुक्त है?",whyAdvice:"यह सलाह क्यों?",cropTips:"फसल प्रबंधन सुझाव",forecast:"7 दिन का मौसम और मिट्टी का पानी",listen:"सलाह सुनें",income:"आय",cost:"लागत",profitLabel:"लाभ",returnCost:"लागत पर रिटर्न",nutrientTarget:"पोषक तत्व लक्ष्य",approxCost:"अनुमानित लागत",guideline:"यह केवल सामान्य मार्गदर्शन है। मात्रा की पुष्टि स्थानीय कृषि कार्यालय से करें।",liveWeather:"लाइव मौसम",demoWeather:"डेमो मौसम",cropRankHint:"आपकी मिट्टी, मिट्टी परीक्षण, मौसम, सीज़न और सामान्य कीमतों का उपयोग (प्रति एकड़)।",samplePrice:"कीमतें, उपज और उपयुक्तता स्कोर नमूना मान हैं। स्थानीय बाजार और कृषि कार्यालय से जाँचें।",sampleProfit:"उपज, लागत और कीमतें नमूना मान हैं। MSP, Agmarknet या स्थानीय डेटा से अपडेट करें।",weatherLoading:"आपके खेत का मौसम जाँचा जा रहा है…",voiceHint:"आप गाँव, फसल, मिट्टी और भूमि का क्षेत्रफल बता सकते हैं।",acreHelp:"अपनी कुल भूमि का क्षेत्रफल भरें। 0.5 या 2.5 जैसे दशमलव लिख सकते हैं।",selectState:"पहले राज्य चुनें",selectDistrict:"पहले ज़िला चुनें",selectOwnership:"स्वामित्व चुनें",selectWater:"पानी का स्रोत चुनें",selectMethod:"तरीका चुनें",selectSeason:"मौसम चुनें",selectPractice:"खेती का तरीका चुनें",owned:"स्वयं की",leased:"पट्टे पर",shared:"साझा / पारिवारिक भूमि",borewell:"बोरवेल",openWell:"खुला कुआँ",canal:"नहर",rainfed:"वर्षा आधारित",farmPond:"खेत का तालाब",other:"अन्य",drip:"ड्रिप",sprinkler:"स्प्रिंकलर",flood:"बाढ़ / नाली",manual:"मैनुअल",conventional:"पारंपरिक",organic:"जैविक",natural:"प्राकृतिक खेती",integrated:"एकीकृत खेती",kharif:"खरीफ (जून–सितंबर)",rabi:"रबी (अक्टूबर–फरवरी)",summer:"गर्मी (मार्च–मई)",noWeatherRisk:"अगले 7 दिनों में मौसम का कोई बड़ा जोखिम नहीं है।",priceSample:"कीमतें, उपज और उपयुक्तता स्कोर नमूना मान हैं। स्थानीय बाजार और कृषि कार्यालय से जाँचें।",profitSample:"उपज, लागत और कीमतें नमूना मान हैं। MSP, Agmarknet या स्थानीय डेटा से अपडेट करें।",careFor:"आपकी फसल की देखभाल",poorFit:"(कम उपयुक्तता)",fit:"उपयुक्तता",perHectare:"किलो प्रति हेक्टेयर, मिट्टी परीक्षण के अनुसार समायोजित।",perAcre:"प्रति एकड़",priceFalls:"कीमत 20% घटने पर लाभ",priceRises:"कीमत 20% बढ़ने पर लाभ",accuracy:"मॉडल की सटीकता",sampleAccuracy:"यह नमूना प्रशिक्षण डेटा पर है। सटीकता बताने से पहले वास्तविक डेटा पर दोबारा प्रशिक्षण करें।"},
+ kn:{logout:"ಲಾಗ್ ಔಟ್",switchFarmer:"ರೈತರನ್ನು ಬದಲಿಸಿ",farmMenu:"ಕೃಷಿ ಮೆನು",farmerProfile:"ರೈತರ ಪ್ರೊಫೈಲ್",farmDetails:"ಹೊಲದ ವಿವರಗಳು",soilHealth:"ಮಣ್ಣಿನ ಆರೋಗ್ಯ",cropPlanning:"ಬೆಳೆ ಯೋಜನೆ",myCrops:"ನಾನು ಬೆಳೆದ ಬೆಳೆಗಳು",comingLater:"ಮುಂದಿನ ಹಂತಗಳಲ್ಲಿ ಬರಲಿದೆ",needHelp:"ಸಹಾಯ ಬೇಕೇ?",voiceHelp:"ನಿಮ್ಮ ಹೊಲದ ಬಗ್ಗೆ ಹೇಳಲು ಧ್ವನಿ ಬಟನ್ ಬಳಸಿ.",profileHeading:"1. ರೈತರ ಪ್ರೊಫೈಲ್",registrationDetails:"ನಿಮ್ಮ ನೋಂದಣಿ ವಿವರಗಳು",farmerName:"ರೈತರ ಹೆಸರು",mobile:"ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",preferredLanguage:"ಆದ್ಯತೆಯ ಭಾಷೆ",saveProfile:"ಪ್ರೊಫೈಲ್ ಉಳಿಸಿ",deleteProfile:"ಪ್ರೊಫೈಲ್ ಅಳಿಸಿ",farmHeading:"2. ಹೊಲದ ವಿವರಗಳು",farmHint:"ತಿಳಿದಿರುವ ವಿವರಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ. ಎಲ್ಲವೂ ಐಚ್ಛಿಕ; ಹೆಚ್ಚಿನ ವಿವರಗಳಿಂದ ಸಲಹೆ ಉತ್ತಮವಾಗುತ್ತದೆ.",state:"ರಾಜ್ಯ / ಕೇಂದ್ರಾಡಳಿತ ಪ್ರದೇಶ",district:"ಜಿಲ್ಲೆ",village:"ಗ್ರಾಮ / ಪಟ್ಟಣ / ನಗರ",landArea:"ನಿಮ್ಮ ಬಳಿ ಎಷ್ಟು ಭೂಮಿ ಇದೆ? (ಎಕರೆಗಳಲ್ಲಿ)",ownership:"ಭೂಮಿಯ ಮಾಲೀಕತ್ವ",waterSource:"ನೀರು / ನೀರಾವರಿ ಮೂಲ",irrigationMethod:"ನೀರಾವರಿ ವಿಧಾನ",previousCrop:"ಹಿಂದಿನ ಬೆಳೆ",season:"ಋತು / ಬಿತ್ತನೆ ಅವಧಿ",practice:"ಕೃಷಿ ಪದ್ಧತಿ",speakDetails:"ಹೊಲದ ವಿವರಗಳನ್ನು ಮಾತನಾಡಿ",soilDetails:"ಮಣ್ಣು ಮತ್ತು ಹವಾಮಾನ ವಿವರಗಳು",soilPH:"ಮಣ್ಣಿನ pH",humidity:"ತೇವಾಂಶ %",rain:"ನಿರೀಕ್ಷಿತ ಮಳೆ (ತಿಂಗಳಿಗೆ ಮಿ.ಮೀ.)",landPrice:"ನಿಮ್ಮ ಭೂಮಿ ಮತ್ತು ಬೆಲೆ",price:"ಬೆಲೆ (ಪ್ರತಿ ಕ್ವಿಂಟಾಲ್‌ಗೆ ₹)",getAdvice:"ನನ್ನ ಹೊಲದ ಸಲಹೆ ಪಡೆಯಿರಿ",planTab:"ಬೆಳೆ ಯೋಜನೆ",notSown:"ಇನ್ನೂ ಬಿತ್ತನೆ ಮಾಡಿಲ್ಲ",growTab:"ಈಗಿರುವ ಬೆಳೆ ನಿರ್ವಹಣೆ",alreadySown:"ಈಗಾಗಲೇ ಬಿತ್ತನೆ ಮಾಡಿದ್ದೇನೆ",emptyTitle:"ನಿಮ್ಮ ಹೊಲದ ಸಲಹೆ ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ",emptyText:"ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ ಮತ್ತು ‘ನನ್ನ ಹೊಲದ ಸಲಹೆ ಪಡೆಯಿರಿ’ ಒತ್ತಿರಿ. ಯಾವಾಗ ನೀರು ಹಾಕಬೇಕು, ಯಾವ ಬೆಳೆ ಬೆಳೆಯಬೇಕು ಮತ್ತು ಯಾವ ಗೊಬ್ಬರ ಬಳಸಬೇಕು ಎಂಬುದನ್ನು ತಿಳಿಯಿರಿ.",weatherRisk:"ಹವಾಮಾನ ಅಪಾಯ ಎಚ್ಚರಿಕೆಗಳು",bestCrop:"ಲಾಭಕ್ಕಾಗಿ ಉತ್ತಮ ಬೆಳೆ",profit:"ಲಾಭವಾಗುತ್ತದೆಯೇ?",fertilizer:"ಒಂದು ಎಕರೆಗೆ ಗೊಬ್ಬರ",cropSuit:"ಈ ಭೂಮಿಗೆ ನಿಮ್ಮ ಬೆಳೆ ಎಷ್ಟು ಸೂಕ್ತ?",whyAdvice:"ಈ ಸಲಹೆ ಏಕೆ?",cropTips:"ಬೆಳೆ ನಿರ್ವಹಣೆ ಸಲಹೆಗಳು",forecast:"7 ದಿನಗಳ ಹವಾಮಾನ ಮತ್ತು ಮಣ್ಣಿನ ನೀರು",listen:"ಸಲಹೆ ಕೇಳಿ",income:"ಆದಾಯ",cost:"ವೆಚ್ಚ",profitLabel:"ಲಾಭ",returnCost:"ವೆಚ್ಚದ ಮೇಲಿನ ಆದಾಯ",nutrientTarget:"ಪೋಷಕಾಂಶ ಗುರಿ",approxCost:"ಅಂದಾಜು ವೆಚ್ಚ",guideline:"ಇದು ಮಾರ್ಗದರ್ಶನ ಮಾತ್ರ. ಪ್ರಮಾಣವನ್ನು ಸ್ಥಳೀಯ ಕೃಷಿ ಕಚೇರಿಯಲ್ಲಿ ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",liveWeather:"ನೇರ ಹವಾಮಾನ",demoWeather:"ಮಾದರಿ ಹವಾಮಾನ",cropRankHint:"ನಿಮ್ಮ ಮಣ್ಣು, ಮಣ್ಣಿನ ಪರೀಕ್ಷೆ, ಹವಾಮಾನ, ಋತು ಮತ್ತು ಸಾಮಾನ್ಯ ಬೆಲೆಗಳನ್ನು ಬಳಸುತ್ತದೆ (ಪ್ರತಿ ಎಕರೆಗೆ).",samplePrice:"ಬೆಲೆ, ಇಳುವರಿ ಮತ್ತು ಹೊಂದಾಣಿಕೆ ಅಂಕಗಳು ಮಾದರಿ ಮೌಲ್ಯಗಳು. ಸ್ಥಳೀಯ ಮಾರುಕಟ್ಟೆ ಮತ್ತು ಕೃಷಿ ಕಚೇರಿಯಲ್ಲಿ ಪರಿಶೀಲಿಸಿ.",sampleProfit:"ಇಳುವರಿ, ವೆಚ್ಚ ಮತ್ತು ಬೆಲೆ ಮಾದರಿ ಮೌಲ್ಯಗಳು. MSP, Agmarknet ಅಥವಾ ಸ್ಥಳೀಯ ಮಾಹಿತಿಯಿಂದ ನವೀಕರಿಸಿ.",weatherLoading:"ನಿಮ್ಮ ಹೊಲದ ಹವಾಮಾನ ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ…",voiceHint:"ನಿಮ್ಮ ಗ್ರಾಮ, ಬೆಳೆ, ಮಣ್ಣಿನ ವಿಧ ಮತ್ತು ಭೂಮಿಯ ವಿಸ್ತೀರ್ಣವನ್ನು ಹೇಳಬಹುದು.",acreHelp:"ನಿಮ್ಮ ಒಟ್ಟು ಭೂಮಿಯ ವಿಸ್ತೀರ್ಣ ನಮೂದಿಸಿ. 0.5 ಅಥವಾ 2.5 ಮುಂತಾದ ದಶಮಾಂಶಗಳನ್ನು ಬಳಸಬಹುದು.",selectState:"ಮೊದಲು ರಾಜ್ಯ ಆಯ್ಕೆಮಾಡಿ",selectDistrict:"ಮೊದಲು ಜಿಲ್ಲೆ ಆಯ್ಕೆಮಾಡಿ",selectOwnership:"ಮಾಲೀಕತ್ವ ಆಯ್ಕೆಮಾಡಿ",selectWater:"ನೀರಿನ ಮೂಲ ಆಯ್ಕೆಮಾಡಿ",selectMethod:"ವಿಧಾನ ಆಯ್ಕೆಮಾಡಿ",selectSeason:"ಋತು ಆಯ್ಕೆಮಾಡಿ",selectPractice:"ಕೃಷಿ ಪದ್ಧತಿ ಆಯ್ಕೆಮಾಡಿ",owned:"ಸ್ವಂತ",leased:"ಗುತ್ತಿಗೆ",shared:"ಹಂಚಿಕೊಂಡ / ಕುಟುಂಬದ ಭೂಮಿ",borewell:"ಬೋರ್‌ವೆಲ್",openWell:"ತೆರೆದ ಬಾವಿ",canal:"ಕಾಲುವೆ",rainfed:"ಮಳೆಆಧಾರಿತ",farmPond:"ಕೃಷಿ ಹೊಂಡ",other:"ಇತರೆ",drip:"ಹನಿ ನೀರಾವರಿ",sprinkler:"ಸಿಂಪಡಣೆ",flood:"ಹರಿವು / ಕಾಲುವೆ",manual:"ಕೈಯಿಂದ",conventional:"ಸಾಂಪ್ರದಾಯಿಕ",organic:"ಸಾವಯವ",natural:"ನೈಸರ್ಗಿಕ ಕೃಷಿ",integrated:"ಸಮಗ್ರ ಕೃಷಿ",kharif:"ಖರೀಫ್ (ಜೂನ್–ಸೆಪ್ಟೆಂಬರ್)",rabi:"ರಬಿ (ಅಕ್ಟೋಬರ್–ಫೆಬ್ರವರಿ)",summer:"ಬೇಸಿಗೆ (ಮಾರ್ಚ್–ಮೇ)",noWeatherRisk:"ಮುಂದಿನ 7 ದಿನಗಳಲ್ಲಿ ದೊಡ್ಡ ಹವಾಮಾನ ಅಪಾಯಗಳಿಲ್ಲ.",priceSample:"ಬೆಲೆ, ಇಳುವರಿ ಮತ್ತು ಹೊಂದಾಣಿಕೆ ಅಂಕಗಳು ಮಾದರಿ ಮೌಲ್ಯಗಳು. ಸ್ಥಳೀಯ ಮಾರುಕಟ್ಟೆ ಮತ್ತು ಕೃಷಿ ಕಚೇರಿಯಲ್ಲಿ ಪರಿಶೀಲಿಸಿ.",profitSample:"ಇಳುವರಿ, ವೆಚ್ಚ ಮತ್ತು ಬೆಲೆ ಮಾದರಿ ಮೌಲ್ಯಗಳು. MSP, Agmarknet ಅಥವಾ ಸ್ಥಳೀಯ ಮಾಹಿತಿಯಿಂದ ನವೀಕರಿಸಿ.",careFor:"ನಿಮ್ಮ ಬೆಳೆಯ ಆರೈಕೆ",poorFit:"(ಕಡಿಮೆ ಹೊಂದಾಣಿಕೆ)",fit:"ಹೊಂದಾಣಿಕೆ",perHectare:"ಪ್ರತಿ ಹೆಕ್ಟೇರ್‌ಗೆ ಕಿಲೋಗಳು, ಮಣ್ಣಿನ ಪರೀಕ್ಷೆಗೆ ಅನುಗುಣವಾಗಿ ಹೊಂದಿಸಲಾಗಿದೆ.",perAcre:"ಪ್ರತಿ ಎಕರೆಗೆ",priceFalls:"ಬೆಲೆ 20% ಇಳಿದರೆ ಲಾಭ",priceRises:"ಬೆಲೆ 20% ಏರಿದರೆ ಲಾಭ",accuracy:"ಮಾದರಿಯ ನಿಖರತೆ",sampleAccuracy:"ಇದು ಮಾದರಿ ತರಬೇತಿ ಡೇಟಾದ ಮೇಲೆ ಇದೆ. ನಿಖರತೆ ಹೇಳುವ ಮೊದಲು ನೈಜ ಡೇಟಾದಿಂದ ಮರುತರಬೇತಿ ನೀಡಿ."}
+};
+// English reset dictionary: ensures switching back from an Indian language restores every extra field and option.
+EXTRA_UI.en = {"logout":"Log out","switchFarmer":"Switch farmer","farmMenu":"Farm menu","farmerProfile":"Farmer profile","farmDetails":"Farm details","soilHealth":"Soil health","cropPlanning":"Crop planning","myCrops":"My crops","comingLater":"Coming soon","needHelp":"Need help?","voiceHelp":"Use the voice button to describe your farm.","profileHeading":"1. Farmer profile","registrationDetails":"Your registration details","farmerName":"Farmer name","mobile":"Mobile number","preferredLanguage":"Preferred language","saveProfile":"Save profile","deleteProfile":"Delete profile","farmHeading":"2. Farm details","farmHint":"Enter what you know. Every field is optional, but more detail improves the advice.","state":"State / Union Territory","district":"District","village":"Village / Town / City","landArea":"How much land do you have? (in acres) *","ownership":"Land ownership","waterSource":"Water / irrigation source","irrigationMethod":"Irrigation method","previousCrop":"Previous crop","season":"Season / sowing period","practice":"Farming practice","speakDetails":"Speak farm details","soilDetails":"Soil and weather details","soilPH":"Soil pH","humidity":"Humidity %","rain":"Rain you expect (mm per month)","landPrice":"Your land and price","price":"Price (₹ per quintal)","getAdvice":"Get my farm advice","planTab":"Crop planning","notSown":"I have not sown yet","growTab":"Existing crop management","alreadySown":"I have already sown","emptyTitle":"Your farm advice will appear here","emptyText":"Answer the questions and select Get my farm advice to learn when to irrigate, what to grow and which fertilizer to use.","weatherRisk":"Weather risk alerts","bestCrop":"Best crop for profit","profit":"Will it make a profit?","fertilizer":"Fertilizer for one acre","cropSuit":"How well does your crop suit this land?","whyAdvice":"Why this advice?","cropTips":"Crop management tips","forecast":"7-day forecast and soil water","listen":"Listen to advice","income":"Income","cost":"Cost","profitLabel":"Profit","returnCost":"Return on cost","nutrientTarget":"Nutrient target","approxCost":"Approximate cost","guideline":"Guideline only. Confirm quantities with your local agriculture office.","liveWeather":"Live weather","demoWeather":"Demo weather","cropRankHint":"Based on your soil, soil test, weather, season and typical prices (per acre).","poorFit":"poor fit","fit":"fit","priceFalls":"Profit if price falls by 20%","priceRises":"Profit if price rises by 20%","accuracy":"Model accuracy","sampleAccuracy":"This is based on sample training data. Retrain with real data before reporting accuracy.","samplePrice":"Prices, yields and fit scores are sample values. Check with your local market and agriculture office.","sampleProfit":"Yield, cost and price are sample defaults. Update them from MSP, Agmarknet or local data.","weatherLoading":"Checking the weather for your farm…","acreHelp":"Enter your total farm area. You can use decimals, for example 0.5 acre or 2.5 acres.","selectState":"Select state / UT","selectDistrict":"Select district","selectVillage":"Select village / town / city","selectOwnership":"Select ownership","owned":"Owned","leased":"Leased","shared":"Shared / family land","selectWater":"Select water source","borewell":"Borewell","openWell":"Open well","canal":"Canal","rainfed":"Rainfed","farmPond":"Farm pond","other":"Other","selectMethod":"Select method","drip":"Drip","sprinkler":"Sprinkler","flood":"Flood / furrow","manual":"Manual","selectSeason":"Select season","kharif":"Kharif (Jun–Sep)","rabi":"Rabi (Oct–Feb)","summer":"Summer","selectPractice":"Select farming practice","conventional":"Conventional","organic":"Organic","natural":"Natural farming","integrated":"Integrated"};
+function applyExtraLanguage(lang){
+ const x=EXTRA_UI[lang];
+ if(!x)return;
+ const extras={
+  en:{areaPlaceholder:"Example: 2.5",previousCropPlaceholder:"e.g. Ragi, maize",locationLoading:"Loading location list…",locationHelp:"Choose your village, town or city.",areaLabelSuffix:" (in acres) *"},
+  hi:{areaPlaceholder:"उदाहरण: 2.5",previousCropPlaceholder:"जैसे: रागी, मक्का",locationLoading:"स्थान सूची लोड हो रही है…",locationHelp:"गाँव, कस्बा या शहर चुनें।",areaLabelSuffix:" (एकड़ में) *"},
+  te:{areaPlaceholder:"ఉదాహరణ: 2.5",previousCropPlaceholder:"ఉదా: రాగి, మొక్కజొన్న",locationLoading:"ప్రాంతాల జాబితా లోడ్ అవుతోంది…",locationHelp:"గ్రామం, పట్టణం లేదా నగరాన్ని ఎంచుకోండి.",areaLabelSuffix:" (ఎకరాల్లో) *"},
+  kn:{areaPlaceholder:"ಉದಾಹರಣೆ: 2.5",previousCropPlaceholder:"ಉದಾ: ರಾಗಿ, ಮೆಕ್ಕೆಜೋಳ",locationLoading:"ಸ್ಥಳಗಳ ಪಟ್ಟಿ ಲೋಡ್ ಆಗುತ್ತಿದೆ…",locationHelp:"ಗ್ರಾಮ, ಪಟ್ಟಣ ಅಥವಾ ನಗರವನ್ನು ಆಯ್ಕೆಮಾಡಿ.",areaLabelSuffix:" (ಎಕರೆಗಳಲ್ಲಿ) *"}
+ }[lang]||{};
+ const setText=(id,key)=>{const el=document.getElementById(id);if(el&&x[key])el.textContent=x[key]};
+ const setLabel=(selector,value)=>{
+  const el=(typeof selector==='string')?document.querySelector(selector):selector;if(!el||!value)return;
+  const textNode=[...el.childNodes].find(n=>n.nodeType===Node.TEXT_NODE&&n.textContent.trim());
+  if(textNode)textNode.textContent=' '+value+' ';
+  else el.insertBefore(document.createTextNode(value+' '),el.firstChild);
+ };
+ // Profile and navigation controls.
+ setText('logoutFarmer','logout');setText('switchFarmer','switchFarmer');
+ setText('switchFarmerInline','switchFarmer');setText('saveProfile','saveProfile');setText('deleteProfile','deleteProfile');
+ const textMap={
+  '#sideNav .side-label':'farmMenu','#sideNav .side-link:nth-of-type(1) span':'farmerProfile',
+  '#sideNav .side-link:nth-of-type(2) span':'farmDetails','#sideNav .side-link:nth-of-type(3) span':'soilHealth',
+  '#sideNav .side-link:nth-of-type(4) span':'cropPlanning','#sideNav .side-link:nth-of-type(5) span':'myCrops',
+  '#sideNav .side-link:nth-of-type(6) span':'comingLater','#sideNav .side-help b':'needHelp',
+  '#sideNav .side-help small':'voiceHelp','#planTab b':'planTab','#planTab small':'notSown',
+  '#growTab b':'growTab','#growTab small':'alreadySown','#farmerProfile .section-heading h2':'profileHeading',
+  '#farmerProfile .section-heading p':'registrationDetails','#farmDetails h2':'farmHeading',
+  '#farmDetails .step-subtitle':'farmHint'
+ };
+ Object.entries(textMap).forEach(([selector,key])=>{const el=document.querySelector(selector);if(el&&x[key])el.textContent=x[key]});
+ const fieldLabels={
+  profileName:'farmerName',profilePhone:'mobile',regLanguage:'preferredLanguage',farmState:'state',
+  farmDistrict:'district',landOwnership:'ownership',irrigationSource:'waterSource',
+  irrigationMethod:'irrigationMethod',previousCrop:'previousCrop',sowingSeason:'season',
+  farmingPractice:'practice',ph:'soilPH',hum:'humidity',rain:'rain',price:'price'
+ };
+ Object.entries(fieldLabels).forEach(([id,key])=>{const el=document.getElementById(id);if(el)setLabel(el.closest('label')||`label[for="${id}"]`,x[key])});
+ setLabel('label[for="loc"]',x.village);
+ setLabel('label[for="area"]',x.landArea);
+ setText('voiceBtn','speakDetails');setText('voiceHint','voiceHint');
+ const areaHelp=document.querySelector('.farm-area-field .area-help');if(areaHelp&&x.acreHelp)areaHelp.textContent=x.acreHelp;
+ const locationStatus=document.getElementById('locationStatus');if(locationStatus&&extras.locationHelp)locationStatus.textContent=extras.locationHelp;
+ const area=document.getElementById('area');if(area&&extras.areaPlaceholder)area.placeholder=extras.areaPlaceholder;
+ const previous=document.getElementById('previousCrop');if(previous&&extras.previousCropPlaceholder)previous.placeholder=extras.previousCropPlaceholder;
+ // Translate select options by their stable values (not by their current visible text).
+ const optionMaps={
+  landOwnership:{'':'selectOwnership','Owned':'owned','Leased':'leased','Shared / family land':'shared'},
+  irrigationSource:{'':'selectWater','Borewell':'borewell','Open well':'openWell','Canal':'canal','Rainfed':'rainfed','Farm pond':'farmPond','Other':'other'},
+  irrigationMethod:{'':'selectMethod','Drip':'drip','Sprinkler':'sprinkler','Flood / furrow':'flood','Manual':'manual','Rainfed only':'rainfed'},
+  sowingSeason:{'':'selectSeason','Kharif':'kharif','Rabi':'rabi','Summer':'summer'},
+  farmingPractice:{'':'selectPractice','Conventional':'conventional','Organic':'organic','Natural farming':'natural','Integrated':'integrated'}
+ };
+ Object.entries(optionMaps).forEach(([id,map])=>{const select=document.getElementById(id);if(!select)return;[...select.options].forEach(option=>{const key=map[option.value];if(key&&x[key])option.textContent=x[key]})});
+ // Translate the visible crop/soil labels and advice button consistently.
+ const extraButtons={'#saveProfile':'saveProfile','#deleteProfile':'deleteProfile','#switchFarmerInline':'switchFarmer'};
+ Object.entries(extraButtons).forEach(([selector,key])=>{const el=document.querySelector(selector);if(el&&x[key])el.textContent=x[key]});
+ if(typeof updateAreaConversion==='function')updateAreaConversion();
+}
+
+function applyLanguage(lang){selectedLanguage=lang;$('language').value=lang;if($('registrationLanguage'))$('registrationLanguage').value=lang;if($('regLanguage'))$('regLanguage').value=lang;const d=UI[lang]||UI.en;$('languageIntro').textContent=d.intro;document.querySelectorAll('[data-i18n]').forEach(el=>{let k=el.dataset.i18n;if(d[k])el.textContent=d[k]});$('voiceBtn').textContent=d.voice;$('voiceHint').textContent=d.hint;document.querySelectorAll('.lang-choice').forEach(b=>b.classList.toggle('selected',b.dataset.lang===lang));document.documentElement.lang=lang;applyExtraLanguage(lang);requestAnimationFrame(()=>{applyExtraLanguage(lang);if(typeof translateWholePage==='function')translateWholePage(lang);if(typeof applyFarmV75DynamicLanguage==='function')applyFarmV75DynamicLanguage();})}
+document.querySelectorAll('.lang-choice').forEach(b=>b.onclick=()=>applyLanguage(b.dataset.lang));
+$('continueBtn').onclick=()=>{ $('languageGate').style.display='none';$('registerGate').style.display='grid';$('registrationLanguage').value=selectedLanguage;applyLanguage(selectedLanguage);};
+applyLanguage('en');
+loadIndiaStates();
+try{
+ const saved=JSON.parse(localStorage.getItem('farmsaathi_farmer_profile')||'null');
+ if(saved&&saved.name&&saved.phone){
+  try{sessionStorage.setItem('farmsaathi_active_session','1')}catch(e){}
+  showDashboard(saved);
+ }else{openRegistration()}
+}catch(e){openRegistration()}
+function startVoice(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$('voiceHint').textContent="Voice recognition is not supported here. Please type instead.";return}
+const rec=new SR();rec.lang=UI[selectedLanguage].speech;rec.interimResults=false;rec.onstart=()=>{$('voiceHint').textContent="Listening… speak now"};rec.onresult=e=>{const said=e.results[0][0].transcript,low=said.toLowerCase();$('voiceHint').textContent="Heard: "+said;
+const cm={Rice:["rice","धान","ಭತ್ತ","వరి"],Wheat:["wheat","गेहूं","ಗೋಧಿ","గోధుమ"],Maize:["maize","ಮೆಕ್ಕೆಜೋಳ","మొక్కజొన్న"],Tomato:["tomato","टमाटर","ಟೊಮೆಟೊ","టమాటా"],Cotton:["cotton","कपास","ಹತ್ತಿ","పత్తి"],Sugarcane:["sugarcane","गन्ना","ಕಬ್ಬು","చెరకు"]};
+for(const [c,ws] of Object.entries(cm)){if(ws.some(w=>low.includes(w))){pick('crop',c);break}}
+const smap={Clay:["clay","चिकनी","ಜೇಡಿ","బంకమట్టి"],Sandy:["sandy","रेतीली","ಮರಳು","ఇసుక"],Red:["red soil","लाल मिट्टी","ಕೆಂಪು ಮಣ್ಣು","ఎర్ర నేల"],Black:["black soil","काली मिट्टी","ಕಪ್ಪು ಮಣ್ಣು","నల్ల రేగడి"],Loamy:["loamy","दोमट","ಗೋಡು","లోమీ"]};
+for(const [s,ws] of Object.entries(smap)){if(ws.some(w=>low.includes(w))){pick('soil',s);break}}
+const ac=said.match(/(\d+(?:\.\d+)?)\s*(?:acre|ಎಕರೆ|एकड़|ఎకర)/i);if(ac)$('area').value=ac[1];
+};rec.onerror=()=>{$('voiceHint').textContent="Voice input failed. Please type instead."};rec.start()}
+$('voiceBtn').onclick=startVoice;
+function speakAdvice(){if(!lastAdviceText)return;if(!window.speechSynthesis){alert(localizedMessage('textToSpeech','Text-to-speech is unavailable.'));return}const u=new SpeechSynthesisUtterance(lastAdviceText);u.lang=UI[selectedLanguage].speech;speechSynthesis.cancel();speechSynthesis.speak(u)}
+window.addEventListener('online',()=>{const n=$('netStatus');if(n)n.textContent="Online: live weather can be requested."});
+window.addEventListener('offline',()=>{const n=$('netStatus');if(n)n.textContent=UI[selectedLanguage].offline});
+
+const EMO={Rice:'🍚',Wheat:'🌾',Maize:'🌽',Tomato:'🍅',Cotton:'☁️',Sugarcane:'🎋',Auto:'✨'};
+const SOILD={Sandy:['#e3c98e','Light, water drains fast'],Red:['#c25a3c','Reddish, low in humus'],Loamy:['#8b6441','Soft and crumbly, best all-round'],Clay:['#9a8d7c','Sticky, holds water'],Black:['#2f2b29','Dark, cracks when dry']};
+const STG=[['🌱','Just sown','Initial'],['🌿','Growing','Development'],['🌼','Flowering','Mid-season'],['🌾','Ripening','Late-season']];
+const fill=(id,a,idx)=>$(id).innerHTML=a.map((x,i)=>`<option value="${idx?i:x}">${x}</option>`).join('');
+// Static crop options are present in HTML before any API request; preserve them if options loading fails.
+
+const rs=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+let ECON={},SHC={};
+function pick(id,v){$(id).value=v;$(id).dispatchEvent(new Event('change'));sync()}
+function sync(){
+ document.querySelectorAll('#statusTiles .tile').forEach(t=>t.classList.toggle('on',t.dataset.v==$('status').value));
+ document.querySelectorAll('#cropTiles .tile').forEach(t=>t.classList.toggle('on',t.dataset.v==$('crop').value));
+ document.querySelectorAll('#soilTiles .tile').forEach(t=>t.classList.toggle('on',t.dataset.v==$('soil').value));
+ document.querySelectorAll('#stageTiles .tile').forEach(t=>t.classList.toggle('on',t.dataset.v==$('stage').value));
+ document.querySelectorAll('.seg').forEach(s=>s.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v==$(s.dataset.for).value)));
+ const g=$('status').value=='grow',a=document.querySelector('#cropTiles .ai');if(a)a.disabled=g}
+document.querySelectorAll('#statusTiles .tile').forEach(t=>t.onclick=()=>pick('status',t.dataset.v));
+
+// Initialise the form immediately with local fallback options. The page must remain
+// usable even if /api/options is slow or temporarily unavailable.
+const DEFAULT_CROPS=Array.from($('crop').options).map(o=>o.value).filter(v=>v && v!=='Auto');
+function renderFarmOptions(o={}){
+ if(o.econ && typeof o.econ==='object') ECON=o.econ;
+ const crops=(Array.isArray(o.crops)&&o.crops.length)?o.crops:DEFAULT_CROPS;
+ const soils=(Array.isArray(o.soils)&&o.soils.length)?o.soils:Object.keys(SOILD);
+ const stages=(Array.isArray(o.stages)&&o.stages.length)?o.stages:STG.map(x=>x[2]);
+ fill('crop',crops);
+ $('crop').insertAdjacentHTML('afterbegin','<option value="Auto">Auto (AI choose)</option>');
+ if(!$('crop').value) $('crop').value='Auto';
+ fill('soil',soils);
+ fill('stage',stages,1);
+ for(const id of ['n','p','k']){
+  const previous=$(id).value;
+  fill(id,['Low','Medium','High']);
+  $(id).value=['Low','Medium','High'].includes(previous)?previous:'Medium';
+ }
+ $('cropTiles').innerHTML=`<button type="button" class="tile ai" data-v="Auto"><span class="em">✨</span><div><b>Let AI choose the best crop</b></div></button>`+
+  crops.map(c=>`<button type="button" class="tile" data-v="${c}"><span class="em">${EMO[c]||'🌱'}</span><b>${c}</b></button>`).join('');
+ $('soilTiles').innerHTML=soils.map(s=>`<button type="button" class="tile soilt" data-v="${s}"><i class="chip" style="background:${SOILD[s]?SOILD[s][0]:'#999'}"></i><div><b>${s}</b><br><span class="s">${SOILD[s]?SOILD[s][1]:''}</span></div></button>`).join('');
+ $('stageTiles').innerHTML=STG.map((s,i)=>`<button type="button" class="tile" data-v="${i}"><span class="em">${s[0]}</span><b>${s[1]}</b><span class="s">${s[2]}</span></button>`).join('');
+ document.querySelectorAll('#cropTiles .tile').forEach(t=>t.onclick=()=>pick('crop',t.dataset.v));
+ document.querySelectorAll('#soilTiles .tile').forEach(t=>t.onclick=()=>pick('soil',t.dataset.v));
+ document.querySelectorAll('#stageTiles .tile').forEach(t=>t.onclick=()=>pick('stage',t.dataset.v));
+ // Always create the N/P/K Low–Medium–High controls, independently of the API.
+ document.querySelectorAll('.seg').forEach(s=>{
+  s.innerHTML=['Low','Medium','High'].map(v=>`<button type="button" data-v="${v}">${v}</button>`).join('');
+  s.querySelectorAll('button').forEach(b=>b.onclick=()=>pick(s.dataset.for,b.dataset.v));
+ });
+ if(!soils.includes($('soil').value)) $('soil').value=soils.includes('Loamy')?'Loamy':soils[0];
+ if(!crops.includes($('crop').value) && $('crop').value!=='Auto') $('crop').value='Auto';
+ requestAnimationFrame(()=>{if(typeof applyFarmV75DynamicLanguage==='function')applyFarmV75DynamicLanguage();sync();});
+}
+renderFarmOptions();
+fetch('/api/options',{headers:{'Accept':'application/json'}})
+ .then(async r=>{if(!r.ok)throw new Error('Options API returned HTTP '+r.status);return r.json();})
+ .then(o=>{renderFarmOptions(o);setPrice();sync();})
+ .catch(err=>{
+  console.error('FarmSaathi options loading failed; using built-in options.',err);
+  renderFarmOptions({});
+  setPrice();
+  sync();
+ });
+const setPrice=()=>{const e=ECON[$('crop').value];$('price').value=e?e.price:'';$('price').placeholder=e?'':'auto'};
+$('crop').onchange=setPrice;
+$('status').onchange=()=>{const g=$('status').value=='grow';$('stagebox').style.display=g?'':'none';if(g&&$('crop').value=='Auto'){$('crop').value='Rice';setPrice()}sync()};
+const mt=v=>v<20?'Very dry':v<40?'Dry':v<65?'Moist enough':v<85?'Wet':'Very wet';
+$('sm').oninput=e=>{$('smv').textContent=e.target.value;$('smt').textContent=mt(+e.target.value)};
+$('shc').onchange=async e=>{const f=e.target.files[0];if(!f)return;$('dropt').textContent=f.name;$('shcmsg').textContent='Reading your card…';
+ const fd=new FormData();fd.append('file',f);
+ try{const r=await fetch('/api/upload',{method:'POST',body:fd});const d=await r.json();
+ if(!r.ok){$('shcmsg').innerHTML='⚠️ '+d.error;return}
+ const L=d.levels,V=d.values;if(L.N)$('n').value=L.N;if(L.P)$('p').value=L.P;if(L.K)$('k').value=L.K;if(V.ph)$('ph').value=V.ph;if(d.texture)$('soil').value=d.texture;
+ SHC={ec:V.ec,oc:V.oc,micro:{S:V.S,Zn:V.Zn,B:V.B,Fe:V.Fe,Mn:V.Mn,Cu:V.Cu}};sync();
+ $('shcmsg').innerHTML='✅ We read your card: '+Object.entries(V).map(([k,v])=>`<span class="pill">${k} ${v}</span>`).join('')+'<br>Please check the boxes above.'}catch(x){$('shcmsg').textContent='⚠️ Upload failed. Try again.'}};
+const wic=(r,p,t)=>r>=5?'🌧️':p>=50?'🌦️':t>=37?'🥵':t>=30?'☀️':'⛅';
+const L={ok:'ok',warn:'warn',danger:'danger'};
+window.__farmAdviceSubmitHandler=async e=>{e.preventDefault();const acres=Number($('area').value);if(!Number.isFinite(acres)||acres<=0||acres>10000){alert(localizedMessage('invalidArea','Please enter a valid land area in acres (greater than 0 and no more than 10,000).'));$('area').focus();return;}
+ const submitButton=$('f').querySelector('.go');
+ if(submitButton){submitButton.disabled=true;submitButton.dataset.originalText=submitButton.textContent;submitButton.textContent=selectedLanguage==='hi'?'सलाह तैयार की जा रही है…':selectedLanguage==='kn'?'ಸಲಹೆ ಸಿದ್ಧವಾಗುತ್ತಿದೆ…':selectedLanguage==='te'?'సలహా సిద్ధమవుతోంది…':'Generating advice…'}
+ $('out').innerHTML=`<div class="box spin"><div class="em">🌾</div><p>${EXTRA_UI[selectedLanguage]?.weatherLoading||'Checking the weather for your farm…'}</p></div>`;
+ if(window.innerWidth<=900)$('out').scrollIntoView({behavior:'smooth'});
+ const body={location:$('loc').value,language:selectedLanguage,crop:$('crop').value,soil:$('soil').value,stage:$('status').value=='grow'?+$('stage').value:0,status:$('status').value,shc:SHC,moisture:+$('sm').value,n:$('n').value,p:$('p').value,k:$('k').value,ph:$('ph').value,humidity:$('hum').value,rain:$('rain').value,area:$('area').value,price:$('price').value};
+ let r,d;try{r=await fetch('/api/advice',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body)});const raw=await r.text();try{d=JSON.parse(raw)}catch(parseError){throw new Error('Server returned a non-JSON response (HTTP '+r.status+'): '+raw.slice(0,180))}if(submitButton){submitButton.disabled=false;submitButton.textContent=submitButton.dataset.originalText||'Get my farm advice'}}catch(x){if(submitButton){submitButton.disabled=false;submitButton.textContent=submitButton.dataset.originalText||'Get my farm advice'}const baseMsg=selectedLanguage==='hi'?'सलाह प्राप्त नहीं हो सकी। सर्वर कनेक्शन जाँचें।':selectedLanguage==='kn'?'ಸಲಹೆ ಪಡೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಸರ್ವರ್ ಸಂಪರ್ಕ ಪರಿಶೀಲಿಸಿ.':selectedLanguage==='te'?'సలహా పొందలేకపోయాము. సర్వర్ కనెక్షన్‌ను తనిఖీ చేయండి.':'Could not retrieve advice. Check the Flask terminal and /api/advice endpoint.';const detail=(x&&x.message)?String(x.message):'';$('out').innerHTML=`<div class="err">${baseMsg}<br><small>${detail.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}</small></div>`;return}
+ if(!r.ok){if(submitButton){submitButton.disabled=false;submitButton.textContent=submitButton.dataset.originalText||'Get my farm advice'}$('out').innerHTML=`<div class="err">${d.error||'Advice service returned an error. Check the Flask terminal.'}${d.debug?'<br><small>'+String(d.debug).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+'</small>':''}</div>`;return}
+ const w=d.weather||{},ranking=Array.isArray(d.ranking)?d.ranking:[],top=Math.max(1,...ranking.filter(x=>x.ok).map(x=>x.net)),dn=t=>new Date(t).toLocaleDateString(({hi:'hi-IN',te:'te-IN',kn:'kn-IN',en:'en-IN'})[selectedLanguage]||'en-IN',{weekday:'short'});
+ lastAdviceText=[d.action,d.detail,d.outlook,...d.steps.map(x=>x.text),...d.alerts.map(x=>x.msg),...d.tips].join(". ");
+ $('out').innerHTML=`
+ <div class="box"><button type="button" class="listen-btn" onclick="speakAdvice()">${UI[selectedLanguage].listen}</button></div><div class="banner ${d.level}"><div class="em">${d.action.startsWith('No')?'✅':d.action.startsWith('Delay')?'⏳':'💧'}</div><div><h2>${d.action}</h2><p>${d.detail}</p>
+  <div class="meta"><span>${EMO[d.crop]||'🌱'} ${d.crop}${d.auto?' (AI picked)':''}</span><span>📍 ${d.place}</span><span>${d.season}</span><span>${d.source_label|| (d.source==='live'?UI[selectedLanguage].liveWeather||'Live weather':UI[selectedLanguage].demoWeather||'Demo weather')}</span></div></div></div>
+ <div class="box"><h3>${UI[selectedLanguage].weather}</h3><div>${d.outlook}</div>
+  <div class="days">${w.time.map((t,i)=>`<div class="day ${(w.precipitation_sum[i]||0)>=5?'wet':''}"><b>${dn(t)}</b><div class="ic">${wic(w.precipitation_sum[i]||0,w.precipitation_probability_max[i]||0,w.temperature_2m_max[i])}</div><div class="t">${Math.round(w.temperature_2m_max[i])}°<span style="font-weight:400"> / ${Math.round(w.temperature_2m_min[i])}°</span></div><small>🌧 ${Math.round(w.precipitation_sum[i]||0)} mm</small></div>`).join('')}</div></div>
+ <div class="box"><h3>${UI[selectedLanguage].steps}</h3><ul class="todo">${d.steps.map(s=>`<li class="${L[s.level]||''}"><div class="d">${dn(s.date)}<br>${s.date.slice(8)}/${s.date.slice(5,7)}</div><div>${s.text}</div></li>`).join('')}</ul></div>
+ <div class="box"><h3>⚠️ ${EXTRA_UI[selectedLanguage]?.weatherRisk||UI[selectedLanguage].alerts}</h3>${d.alerts.length?`<ul class="todo">${d.alerts.map(a=>`<li class="${a.level}"><div class="d">${dn(a.date)}<br>${a.date.slice(8)}/${a.date.slice(5,7)}</div><div>${a.msg}</div></li>`).join('')}</ul>`:`${EXTRA_UI[selectedLanguage]?.noWeatherRisk||'No major weather risks in the next 7 days.'} ✅`}</div>
+ ${d.care.length?`<div class="box"><h3>${EXTRA_UI[selectedLanguage]?.careFor||"Care for your"} ${d.crop}</h3><ul>${d.care.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:''}
+ <div class="box"><h3>🏆 ${EXTRA_UI[selectedLanguage]?.bestCrop||UI[selectedLanguage].crop_rank}</h3><div class="small" style="margin:0 0 8px">${EXTRA_UI[selectedLanguage]?.cropRankHint||"Uses your soil, soil test, weather, season and usual prices, per acre."}</div>
+  <div class="rank">${d.ranking.map(x=>`<div class="r ${x.crop==d.best?'best':''} ${x.ok?'':'low'}"><span class="em">${EMO[x.crop]||'🌱'}</span><div><div class="nm">${x.crop==d.best?'🏆 ':''}${x.crop}${x.ok?'':(EXTRA_UI[selectedLanguage]?.poorFit||' (poor fit)')}</div><div class="bar"><i style="width:${Math.max(4,x.fit)}%"></i></div></div><div class="rs">${rs(x.net)}<small>${EXTRA_UI[selectedLanguage]?.fit||"fit"} ${x.fit}%</small></div></div>`).join('')}</div>
+  <div class="small">${EXTRA_UI[selectedLanguage]?.priceSample||'Prices, yields and fit scores are sample values. Check with your local market and agriculture office.'}</div></div>
+ <div class="box"><h3>💰 ${EXTRA_UI[selectedLanguage]?.profit||UI[selectedLanguage].profit}</h3><span class="badge ${d.profit.level}">${d.profit.verdict}</span>
+  <div class="tri"><div><small>${EXTRA_UI[selectedLanguage]?.income||"Income"}</small><b>${rs(d.profit.revenue)}</b></div><div><small>${EXTRA_UI[selectedLanguage]?.cost||"Cost"}</small><b>${rs(d.profit.cost)}</b></div><div><small>${EXTRA_UI[selectedLanguage]?.profitLabel||"Profit"}</small><b>${rs(d.profit.net)}</b></div></div>
+  <div>${EXTRA_UI[selectedLanguage]?.returnCost||"Return on cost"}: <b>${d.profit.margin}%</b>. ${EXTRA_UI[selectedLanguage]?.priceFalls||'If the price falls 20%, profit'} <b>${rs(d.profit.net_low)}</b>. ${EXTRA_UI[selectedLanguage]?.priceRises||'If it rises 20%, profit'} <b>${rs(d.profit.net_high)}</b>.</div><div class="small">${EXTRA_UI[selectedLanguage]?.profitSample||'Yield, cost and price are sample defaults. Update them from MSP, Agmarknet or local data.'}</div></div>
+ <div class="box"><h3>🧪 ${EXTRA_UI[selectedLanguage]?.fertilizer||UI[selectedLanguage].fert}</h3>
+  <div class="bags">${Object.entries(d.fert.per_acre).map(([a,v])=>`<div class="bag"><div class="em">${a=='Urea'?'🟦':a=='DAP'?'🟫':'🟥'}</div><b>${v} kg</b><small>${a}</small></div>`).join('')}</div>
+  <div>${EXTRA_UI[selectedLanguage]?.nutrientTarget||"Nutrient target"}: <span class="pill">N ${d.fert.npk[0]}</span><span class="pill">P₂O₅ ${d.fert.npk[1]}</span><span class="pill">K₂O ${d.fert.npk[2]}</span> ${EXTRA_UI[selectedLanguage]?.perHectare||"kg per hectare, adjusted to your soil test."} ${EXTRA_UI[selectedLanguage]?.approxCost||"Approx. cost"} <b>${rs(d.fert.cost)}</b> ${FARM_V75_LANG[selectedLanguage]?.perAcre||"per acre"}.</div>
+  <ul>${d.fert.schedule.map(x=>`<li>${x}</li>`).join('')}${d.fert.notes.map(x=>`<li>${x}</li>`).join('')}</ul>
+  <div class="small">${EXTRA_UI[selectedLanguage]?.guideline||"Guideline only. Confirm doses with your local agriculture office."}</div></div>
+ <div class="box"><h3>🌾 ${EXTRA_UI[selectedLanguage]?.cropSuit||UI[selectedLanguage].suit}</h3><p style="margin:0 0 6px">${d.crop_rec.msg}</p><div class="small" style="margin:0 0 8px">${EXTRA_UI[selectedLanguage]?.cropSuit||"Your crop match"}: ${d.crop_rec.chosen_score}% · average temperature ${d.temp}°C</div>
+  <div class="rank">${d.crop_rec.top.map(t=>`<div class="r"><span class="em">${EMO[t.crop]||'🌱'}</span><div><div class="nm">${t.crop}</div><div class="bar"><i style="width:${Math.max(3,t.score)}%"></i></div></div><div class="rs">${t.score}%</div></div>`).join('')}</div>
+  <div class="small">${EXTRA_UI[selectedLanguage]?.accuracy||"Model accuracy"} ${d.crop_rec.acc}% ${EXTRA_UI[selectedLanguage]?.sampleAccuracy||"is on sample training data. Retrain on real data before quoting it."}</div></div>
+ <div class="box"><h3>🤖 ${EXTRA_UI[selectedLanguage]?.whyAdvice||UI[selectedLanguage].why}</h3><ul>${d.why.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+ <div class="box"><h3>🌱 ${EXTRA_UI[selectedLanguage]?.cropTips||UI[selectedLanguage].tips}</h3><ul>${d.tips.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+ <div class="box"><h3>⛅ ${EXTRA_UI[selectedLanguage]?.forecast||UI[selectedLanguage].forecast}</h3><div style="overflow-x:auto"><table><tr><th>${selectedLanguage==="hi"?"तारीख":selectedLanguage==="kn"?"ದಿನಾಂಕ":selectedLanguage==="te"?"తేదీ":"Date"}</th><th>${selectedLanguage==="hi"?"अधिकतम/न्यूनतम °C":selectedLanguage==="kn"?"ಗರಿಷ್ಠ/ಕನಿಷ್ಠ °C":selectedLanguage==="te"?"గరిష్ఠం/కనిష్ఠం °C":"Max/Min °C"}</th><th>${selectedLanguage==="hi"?"वर्षा मिमी":selectedLanguage==="kn"?"ಮಳೆ ಮಿ.ಮೀ.":selectedLanguage==="te"?"వర్షపాతం మి.మీ.":"Rain mm"}</th><th></th><th>${selectedLanguage==="hi"?"वर्षा %":selectedLanguage==="kn"?"ಮಳೆ %":selectedLanguage==="te"?"వర్షం అవకాశం %":"Rain %"}</th><th>ET₀</th><th>${selectedLanguage==="hi"?"उपयोग किया गया पानी (मिमी)":selectedLanguage==="kn"?"ಬಳಸಿದ ನೀರು (ಮಿ.ಮೀ.)":selectedLanguage==="te"?"వినియోగించిన నీరు (మి.మీ.)":"Water used up (mm)"}</th></tr>
+  ${w.time.map((t,i)=>`<tr><td>${t.slice(5)}</td><td>${w.temperature_2m_max[i]}/${w.temperature_2m_min[i]}</td><td>${w.precipitation_sum[i]||0}</td><td style="width:80px"><div style="background:#4a90d9;height:8px;border-radius:4px;width:${Math.min(100,(w.precipitation_sum[i]||0)/Math.max(10,...w.precipitation_sum.map(x=>x||0))*100)}%"></div></td><td>${w.precipitation_probability_max[i]||0}</td><td>${w.et0_fao_evapotranspiration[i]}</td><td>${d.sim[i].depletion}</td></tr>`).join('')}</table></div></div>`;try{localStorage.setItem('farmsaathi_last_advice',$('out').innerHTML)}catch(e){};requestAnimationFrame(()=>applyFarmV75DynamicLanguage()); };
+
+/* v7.2: apply the selected language to every farmer-facing page element.
+   Original English text is retained in memory so switching languages is reversible.
+   Proper names (farmer, village, district, crop cultivar names), abbreviations and
+   numerical values are intentionally kept intact unless a fixed label is translated. */
+const FULL_TEXT_KEYS={
+ 'FarmSaathi: your farming friend':'title','Your farming friend':'title','Welcome to FarmSaathi AI':'welcome','Farmer':'farmerRole','Choose your language to continue':'intro','Where is your farm?':'location',
+ 'What is happening on your farm?':'status','I want to sow':'sow','Crop is growing':'grow','Which crop?':'crop',
+ 'What is your soil like?':'soil','How wet is the soil today?':'moisture','Soil Health Card':'card',
+ 'Soil and weather details':'details','Your land and price':'land','Get my farm advice':'advice',
+ 'Speak farm details':'voice','🎤 Speak farm details':'voice','You can say your village, crop, soil type and land area.':'hint',
+ 'Weather this week':'weather','What to do next':'steps','Weather risk alerts':'alerts',
+ 'Best crop to grow for profit':'crop_rank','Will it make a profit?':'profit','Fertilizer for one acre':'fert',
+ 'How well your crop suits this land':'suit','Why this advice?':'why','Crop management tips':'tips',
+ '7-day forecast and soil water':'forecast','Listen to advice':'listen',
+ 'Log out':'logout','Switch farmer':'switchFarmer','FARM MENU':'farmMenu','Farmer Profile':'farmerProfile',
+ 'Farm Details':'farmDetails','Soil Health':'soilHealth','Crop Planning':'cropPlanning',
+ 'My Cultivated Crops':'myCrops','Coming in later stages':'comingLater','Need help?':'needHelp',
+ 'Use the voice button to tell us about your farm.':'voiceHelp','1. Farmer Profile':'profileHeading',
+ 'Your registration details':'registrationDetails','Farmer name':'farmerName','Mobile number':'mobile',
+ 'Preferred language':'preferredLanguage','Save profile':'saveProfile','Delete profile':'deleteProfile',
+ '2. Farm Details':'farmHeading','Fill what you know. Every field is optional, but advice improves with more detail.':'farmHint',
+ 'State / Union Territory':'state','District':'district','Village / Town / City':'village',
+ 'How much land do you have? (in acres) *':'landArea','Land ownership':'ownership',
+ 'Water / irrigation source':'waterSource','Irrigation method':'irrigationMethod','Previous crop':'previousCrop',
+ 'Season / sowing period':'season','Farming practice':'practice','Soil pH':'soilPH','Humidity %':'humidity',
+ 'Rain you expect (mm per month)':'rain','Price (₹ per quintal)':'price',
+ 'I have not sown yet':'notSown','Existing Crop Management':'growTab','I have already sown':'alreadySown',
+ 'Suggest the best crop':'suggestCrop','Tell me what to do':'tellMeWhatToDo','How old is the crop?':'cropAge',
+ 'Just sown':'justSown','Growing':'growingStage','Flowering':'flowering','Ripening':'ripening','Initial':'initialStage','Development':'developmentStage','Mid-season':'midSeasonStage','Late-season':'lateSeasonStage','Sandy':'sandySoil','Red':'redSoil','Loamy':'loamySoil','Clay':'claySoil','Black':'blackSoil',
+ 'Light, water drains fast':'sandyDesc','Reddish, low in humus':'redDesc','Soft and crumbly, best all-round':'loamyDesc','Sticky, holds water':'clayDesc','Dark, cracks when dry':'blackDesc',
+ 'Let AI choose the best crop':'letAIChoose','Reading your card…':'readingCard','Please check the boxes above.':'checkBoxes',
+ 'Could not reach the app. Connect to the laptop running FarmSaathi or check the network.':'networkError',
+ 'Please enter a valid land area in acres (greater than 0 and no more than 10,000).':'invalidArea',
+ 'Please enter the farmer name.':'nameRequired','Please enter a valid 10-digit mobile number.':'phoneRequired',
+ 'Please enter your full name.':'fullNameRequired','Log out of FarmSaathi AI? You will return to the registration screen. Your saved farm profile and farm details will remain on this browser for your next visit.':'logoutConfirm',
+ 'Delete this farmer profile from this browser? This will remove the saved profile and cached advice. This action cannot be undone.':'deleteConfirm',
+ 'Voice recognition is not supported here. Please type instead.':'voiceUnsupported','Listening… speak now':'voiceListening','Voice input failed. Please type instead.':'voiceFailed',
+ 'Upload failed. Try again.':'uploadFailed','Text-to-speech is unavailable.':'textToSpeech','Could not load states':'statesFailed','Location service returned':'locationError',
+ 'Moist enough':'moistEnough','Very dry':'veryDry','Dry':'dry','Wet':'wet','Very wet':'veryWet',
+ 'Upload your Soil Health Card':'uploadSoilCard','PDF or photo. We read it and fill the boxes for you.':'uploadHelp',
+ 'Nitrogen':'nitrogen','Phosphorus':'phosphorus','Potash':'potash','Low':'low','Medium':'medium','High':'high',
+ 'Your farm advice will show here':'emptyTitle',
+ 'Answer the questions and press':'emptyLead',
+ 'You will see when to water, what to grow, which fertilizer to use and how much you can earn.':'emptyText',
+ 'Loading states…':'loadingStates','Select state first':'selectState','Select district first':'selectDistrict',
+ 'Select ownership':'selectOwnership','Select water source':'selectWater','Select method':'selectMethod',
+ 'Select season':'selectSeason','Select practice':'selectPractice','Select village / town / city':'selectVillage',
+ 'Loading villages / towns / cities…':'loadingPlaces','No places available':'noPlaces',
+ 'Location list is loading from the Local Government Directory-based data service. Internet is required the first time.':'locationLoading',
+ 'Location list is loading…':'locationLoading','Checking the weather for your farm…':'weatherLoading',
+ 'Online: live weather can be requested.':'online','Offline: live weather is unavailable; sample weather is being used.':'offline',
+ 'Your crop match':'cropMatch','Income':'income','Cost':'cost','Profit':'profitLabel',
+ 'Return on cost':'returnCost','Nutrient target':'nutrientTarget','Approx. cost':'approxCost',
+ 'Guideline only. Confirm doses with your local agriculture office.':'guideline',
+ 'Live weather':'liveWeather','Demo weather':'demoWeather','Date':'date','Max/Min °C':'maxMin',
+ 'Rain mm':'rainMm','Rain %':'rainPercent','Water used up (mm)':'waterUsed',
+ 'Select village / town / city':'selectVillage','Registered farmer':'registeredFarmer',
+ 'Your digital farming companion. Let’s get your profile started.':'registrationTagline',
+ 'STEP 1 OF 2 · FARMER REGISTRATION':'registrationStep','Tell us who you are':'tellUsWho',
+ 'Enter your name and mobile number to continue to your farm dashboard.':'registrationHelp',
+ 'Farmer full name':'farmerFullName','Register & continue':'registerContinue',
+ 'Your details stay in this browser for this demo. Log out to return here; no OTP or SMS is sent.':'privacy',
+ 'Namaste 🙏 Tell us about your farm. We will tell you what to do next.':'namaste',
+ 'SMART FARMING • LOCAL GUIDANCE':'smartFarming','Better decisions, healthier farms.':'betterFarms',
+ 'Select state':'selectState','Select district':'selectDistrict','Select crop':'selectCrop',
+ '1 acre = 0.405 hectares':'acreHectare','Enter your total farm area. You can use decimals, for example 0.5 acre or 2.5 acres.':'acreHelp'
+};
+const FULL_MANUAL={
+ hi:{welcome:'FarmSaathi AI में आपका स्वागत है',farmerRole:'किसान',title:'आपका खेती का साथी',suggestCrop:'सबसे अच्छी फसल सुझाएँ',tellMeWhatToDo:'मुझे बताएं क्या करना है',cropAge:'फसल कितनी पुरानी है?',moistEnough:'पर्याप्त नमी',veryDry:'बहुत सूखी',dry:'सूखी',wet:'गीली',veryWet:'बहुत गीली',uploadSoilCard:'अपना मृदा स्वास्थ्य कार्ड अपलोड करें',uploadHelp:'PDF या फोटो। हम इसे पढ़कर जानकारी भरेंगे।',nitrogen:'नाइट्रोजन',phosphorus:'फॉस्फोरस',potash:'पोटाश',low:'कम',medium:'मध्यम',high:'अधिक',emptyTitle:'आपके खेत की सलाह यहाँ दिखाई देगी',emptyLead:'प्रश्नों के उत्तर दें और दबाएँ',emptyText:'आप जानेंगे कि कब सिंचाई करनी है, क्या उगाना है, कौन सा उर्वरक उपयोग करना है और कितनी कमाई हो सकती है।',locationLoading:'स्थान सूची स्थानीय सरकारी निर्देशिका से लोड हो रही है। पहली बार इंटरनेट आवश्यक है।',loadingStates:'राज्यों की सूची लोड हो रही है…',selectVillage:'गाँव / कस्बा / शहर चुनें',loadingPlaces:'गाँव / कस्बे / शहर लोड हो रहे हैं…',noPlaces:'कोई स्थान उपलब्ध नहीं',online:'ऑनलाइन: लाइव मौसम का अनुरोध किया जा सकता है।',offline:'ऑफ़लाइन: लाइव मौसम उपलब्ध नहीं है; नमूना मौसम उपयोग हो रहा है।',cropMatch:'आपकी फसल का मिलान',date:'तारीख',maxMin:'अधिकतम/न्यूनतम °C',rainMm:'वर्षा मिमी',rainPercent:'वर्षा %',waterUsed:'उपयोग किया गया पानी (मिमी)',registeredFarmer:'पंजीकृत किसान',registrationTagline:'आपका डिजिटल खेती साथी। आइए आपकी प्रोफ़ाइल शुरू करें।',registrationStep:'चरण 1/2 · किसान पंजीकरण',tellUsWho:'अपने बारे में बताएं',registrationHelp:'अपने खेत के डैशबोर्ड पर जाने के लिए नाम और मोबाइल नंबर दर्ज करें।',farmerFullName:'किसान का पूरा नाम',registerContinue:'पंजीकरण करें और आगे बढ़ें',privacy:'आपकी जानकारी इस डेमो के लिए इसी ब्राउज़र में रहती है। लॉग आउट करने पर पंजीकरण स्क्रीन पर लौटेंगे; कोई OTP या SMS नहीं भेजा जाता।',namaste:'नमस्ते 🙏 अपने खेत के बारे में बताएं। हम आपको आगे क्या करना है बताएँगे।',smartFarming:'स्मार्ट खेती • स्थानीय मार्गदर्शन',betterFarms:'बेहतर निर्णय, स्वस्थ खेत।',selectCrop:'फसल चुनें',acreHectare:'1 एकड़ = 0.405 हेक्टेयर',justSown:'अभी-अभी बोया',growingStage:'बढ़ रही है',flowering:'फूल आना',ripening:'पकना',sandyDesc:'हल्की मिट्टी, पानी जल्दी निकलता है',redDesc:'लाल मिट्टी, ह्यूमस कम',loamyDesc:'भुरभुरी मिट्टी, सामान्यतः अच्छी',clayDesc:'चिकनी मिट्टी, पानी रोकती है',blackDesc:'गहरी मिट्टी, सूखने पर दरारें पड़ती हैं',letAIChoose:'AI को सबसे अच्छी फसल चुनने दें',readingCard:'आपका कार्ड पढ़ा जा रहा है…',checkBoxes:'कृपया ऊपर दिए गए मान जाँचें।',networkError:'ऐप से संपर्क नहीं हो पाया। FarmSaathi चल रहे लैपटॉप से कनेक्ट करें या नेटवर्क जाँचें।',invalidArea:'कृपया 0 से अधिक और 10,000 एकड़ से कम भूमि क्षेत्र दर्ज करें।',nameRequired:'कृपया किसान का नाम दर्ज करें।',phoneRequired:'कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।',fullNameRequired:'कृपया अपना पूरा नाम दर्ज करें।',logoutConfirm:'क्या आप FarmSaathi AI से लॉग आउट करना चाहते हैं? आप पंजीकरण स्क्रीन पर लौटेंगे। आपकी प्रोफ़ाइल इसी ब्राउज़र में सुरक्षित रहेगी।',deleteConfirm:'क्या आप इस ब्राउज़र से किसान प्रोफ़ाइल और सहेजी गई सलाह हटाना चाहते हैं? यह कार्रवाई वापस नहीं की जा सकती।',voiceUnsupported:'इस ब्राउज़र में आवाज़ पहचान उपलब्ध नहीं है। कृपया टाइप करें।',voiceListening:'सुन रहा है… अब बोलें',voiceFailed:'आवाज़ इनपुट विफल हुआ। कृपया टाइप करें।',textToSpeech:'पाठ से आवाज़ सुविधा उपलब्ध नहीं है।',uploadFailed:'अपलोड विफल हुआ। फिर से प्रयास करें।',initialStage:'शुरुआती',developmentStage:'विकास',midSeasonStage:'मध्य मौसम',lateSeasonStage:'अंतिम मौसम',sandySoil:'रेतीली',redSoil:'लाल',loamySoil:'दोमट',claySoil:'चिकनी',blackSoil:'काली'},
+ te:{welcome:'FarmSaathi AI కు స్వాగతం',farmerRole:'రైతు',title:'మీ వ్యవసాయ నేస్తం',suggestCrop:'ఉత్తమ పంటను సూచించండి',tellMeWhatToDo:'ఏం చేయాలో చెప్పండి',cropAge:'పంట వయస్సు ఎంత?',moistEnough:'తగినంత తేమ',veryDry:'చాలా పొడి',dry:'పొడి',wet:'తడి',veryWet:'చాలా తడి',uploadSoilCard:'మీ నేల ఆరోగ్య కార్డును అప్‌లోడ్ చేయండి',uploadHelp:'PDF లేదా ఫోటో. మేము చదివి వివరాలను నింపుతాము.',nitrogen:'నత్రజని',phosphorus:'భాస్వరం',potash:'పొటాష్',low:'తక్కువ',medium:'మధ్యస్థం',high:'అధికం',emptyTitle:'మీ పొలం సలహా ఇక్కడ కనిపిస్తుంది',emptyLead:'ప్రశ్నలకు సమాధానమిచ్చి నొక్కండి',emptyText:'ఎప్పుడు నీరు పెట్టాలి, ఏ పంట పండించాలి, ఏ ఎరువు వాడాలి, ఎంత ఆదాయం రావచ్చో తెలుసుకుంటారు.',locationLoading:'స్థానిక ప్రభుత్వ డైరెక్టరీ ఆధారిత ప్రాంతాల జాబితా లోడ్ అవుతోంది. మొదటిసారి ఇంటర్నెట్ అవసరం.',loadingStates:'రాష్ట్రాల జాబితా లోడ్ అవుతోంది…',selectVillage:'గ్రామం / పట్టణం / నగరాన్ని ఎంచుకోండి',loadingPlaces:'గ్రామాలు / పట్టణాలు / నగరాలు లోడ్ అవుతున్నాయి…',noPlaces:'ప్రాంతాలు అందుబాటులో లేవు',online:'ఆన్‌లైన్: ప్రత్యక్ష వాతావరణాన్ని అభ్యర్థించవచ్చు.',offline:'ఆఫ్‌లైన్: ప్రత్యక్ష వాతావరణం లేదు; నమూనా వాతావరణం ఉపయోగిస్తున్నారు.',cropMatch:'మీ పంట అనుకూలత',date:'తేదీ',maxMin:'గరిష్ఠం/కనిష్ఠం °C',rainMm:'వర్షం మి.మీ.',rainPercent:'వర్షం %',waterUsed:'వినియోగించిన నీరు (మి.మీ.)',registeredFarmer:'నమోదైన రైతు',registrationTagline:'మీ డిజిటల్ వ్యవసాయ నేస్తం. మీ ప్రొఫైల్ ప్రారంభిద్దాం.',registrationStep:'దశ 1/2 · రైతు నమోదు',tellUsWho:'మీ గురించి చెప్పండి',registrationHelp:'మీ పొలం డాష్‌బోర్డ్‌కు వెళ్లడానికి పేరు, మొబైల్ నంబర్ నమోదు చేయండి.',farmerFullName:'రైతు పూర్తి పేరు',registerContinue:'నమోదు చేసి కొనసాగండి',privacy:'ఈ డెమో కోసం మీ వివరాలు ఈ బ్రౌజర్‌లోనే ఉంటాయి. లాగ్ అవుట్ చేస్తే నమోదు స్క్రీన్‌కు వెళ్తారు; OTP లేదా SMS పంపబడదు.',namaste:'నమస్కారం 🙏 మీ పొలం గురించి చెప్పండి. తర్వాత ఏమి చేయాలో మేము సూచిస్తాము.',smartFarming:'స్మార్ట్ వ్యవసాయం • స్థానిక మార్గదర్శకం',betterFarms:'మెరుగైన నిర్ణయాలు, ఆరోగ్యకరమైన పొలాలు.',selectCrop:'పంటను ఎంచుకోండి',acreHectare:'1 ఎకరం = 0.405 హెక్టార్లు',justSown:'ఇప్పుడే విత్తారు',growingStage:'పెరుగుతోంది',flowering:'పూత దశ',ripening:'పక్వ దశ',sandyDesc:'తేలిక నేల, నీరు త్వరగా ఇంకిపోతుంది',redDesc:'ఎర్ర నేల, హ్యూమస్ తక్కువ',loamyDesc:'మెత్తగా ఉండే నేల, సాధారణంగా అనుకూలం',clayDesc:'బంకమట్టి, నీటిని నిల్వ ఉంచుతుంది',blackDesc:'నల్ల నేల, ఎండినప్పుడు పగుళ్లు వస్తాయి',letAIChoose:'ఉత్తమ పంటను AI ఎంచుకోనివ్వండి',readingCard:'మీ కార్డును చదువుతోంది…',checkBoxes:'దయచేసి పై విలువలను తనిఖీ చేయండి.',networkError:'యాప్‌ను చేరుకోలేకపోయింది. FarmSaathi నడుస్తున్న ల్యాప్‌టాప్‌కు కనెక్ట్ చేయండి లేదా నెట్‌వర్క్‌ను తనిఖీ చేయండి.',invalidArea:'0 కంటే ఎక్కువ, 10,000 ఎకరాల కంటే తక్కువ భూమి విస్తీర్ణాన్ని నమోదు చేయండి.',nameRequired:'దయచేసి రైతు పేరు నమోదు చేయండి.',phoneRequired:'దయచేసి సరైన 10 అంకెల మొబైల్ నంబర్ నమోదు చేయండి.',fullNameRequired:'దయచేసి మీ పూర్తి పేరు నమోదు చేయండి.',logoutConfirm:'FarmSaathi AI నుంచి లాగ్ అవుట్ చేయాలా? మీరు నమోదు పేజీకి తిరిగి వెళ్తారు. మీ పొలం వివరాలు ఈ బ్రౌజర్‌లోనే ఉంటాయి.',deleteConfirm:'ఈ బ్రౌజర్ నుంచి రైతు ప్రొఫైల్ మరియు సలహాలను తొలగించాలా? ఈ చర్యను రద్దు చేయలేరు.',voiceUnsupported:'ఈ బ్రౌజర్‌లో వాయిస్ గుర్తింపు అందుబాటులో లేదు. దయచేసి టైప్ చేయండి.',voiceListening:'వింటోంది… ఇప్పుడు మాట్లాడండి',voiceFailed:'వాయిస్ ఇన్‌పుట్ విఫలమైంది. దయచేసి టైప్ చేయండి.',textToSpeech:'వచనాన్ని శబ్దంగా వినిపించే సదుపాయం అందుబాటులో లేదు.',uploadFailed:'అప్‌లోడ్ విఫలమైంది. మళ్లీ ప్రయత్నించండి.',initialStage:'ప్రారంభ దశ',developmentStage:'వృద్ధి దశ',midSeasonStage:'మధ్య దశ',lateSeasonStage:'చివరి దశ',sandySoil:'ఇసుక నేల',redSoil:'ఎర్ర నేల',loamySoil:'లోమీ నేల',claySoil:'బంకమట్టి',blackSoil:'నల్ల నేల'},
+ kn:{welcome:'FarmSaathi AI ಗೆ ಸ್ವಾಗತ',farmerRole:'ರೈತ',title:'ನಿಮ್ಮ ಕೃಷಿ ಸ್ನೇಹಿತ',suggestCrop:'ಉತ್ತಮ ಬೆಳೆಯನ್ನು ಸೂಚಿಸಿ',tellMeWhatToDo:'ಏನು ಮಾಡಬೇಕೆಂದು ತಿಳಿಸಿ',cropAge:'ಬೆಳೆಯ ವಯಸ್ಸು ಎಷ್ಟು?',moistEnough:'ಸಾಕಷ್ಟು ತೇವಾಂಶ',veryDry:'ತುಂಬಾ ಒಣ',dry:'ಒಣ',wet:'ತೇವ',veryWet:'ತುಂಬಾ ತೇವ',uploadSoilCard:'ನಿಮ್ಮ ಮಣ್ಣಿನ ಆರೋಗ್ಯ ಕಾರ್ಡ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ',uploadHelp:'PDF ಅಥವಾ ಫೋಟೋ. ನಾವು ಓದಿ ವಿವರಗಳನ್ನು ತುಂಬುತ್ತೇವೆ.',nitrogen:'ಸಾರಜನಕ',phosphorus:'ರಂಜಕ',potash:'ಪೊಟ್ಯಾಶ್',low:'ಕಡಿಮೆ',medium:'ಮಧ್ಯಮ',high:'ಹೆಚ್ಚು',emptyTitle:'ನಿಮ್ಮ ಹೊಲದ ಸಲಹೆ ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ',emptyLead:'ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ ಒತ್ತಿರಿ',emptyText:'ಯಾವಾಗ ನೀರು ಹಾಕಬೇಕು, ಯಾವ ಬೆಳೆ ಬೆಳೆಯಬೇಕು, ಯಾವ ಗೊಬ್ಬರ ಬಳಸಬೇಕು ಮತ್ತು ಎಷ್ಟು ಆದಾಯ ಬರಬಹುದು ಎಂದು ತಿಳಿಯುತ್ತೀರಿ.',locationLoading:'ಸ್ಥಳೀಯ ಸರ್ಕಾರಿ ಡೈರೆಕ್ಟರಿ ಆಧಾರಿತ ಸ್ಥಳಗಳ ಪಟ್ಟಿ ಲೋಡ್ ಆಗುತ್ತಿದೆ. ಮೊದಲ ಬಾರಿಗೆ ಇಂಟರ್ನೆಟ್ ಅಗತ್ಯವಿದೆ.',loadingStates:'ರಾಜ್ಯಗಳ ಪಟ್ಟಿ ಲೋಡ್ ಆಗುತ್ತಿದೆ…',selectVillage:'ಗ್ರಾಮ / ಪಟ್ಟಣ / ನಗರ ಆಯ್ಕೆಮಾಡಿ',loadingPlaces:'ಗ್ರಾಮಗಳು / ಪಟ್ಟಣಗಳು / ನಗರಗಳು ಲೋಡ್ ಆಗುತ್ತಿವೆ…',noPlaces:'ಸ್ಥಳಗಳು ಲಭ್ಯವಿಲ್ಲ',online:'ಆನ್‌ಲೈನ್: ನೇರ ಹವಾಮಾನವನ್ನು ಕೇಳಬಹುದು.',offline:'ಆಫ್‌ಲೈನ್: ನೇರ ಹವಾಮಾನ ಲಭ್ಯವಿಲ್ಲ; ಮಾದರಿ ಹವಾಮಾನ ಬಳಸಲಾಗುತ್ತಿದೆ.',cropMatch:'ನಿಮ್ಮ ಬೆಳೆಯ ಹೊಂದಾಣಿಕೆ',date:'ದಿನಾಂಕ',maxMin:'ಗರಿಷ್ಠ/ಕನಿಷ್ಠ °C',rainMm:'ಮಳೆ ಮಿ.ಮೀ.',rainPercent:'ಮಳೆ %',waterUsed:'ಬಳಸಿದ ನೀರು (ಮಿ.ಮೀ.)',registeredFarmer:'ನೋಂದಾಯಿತ ರೈತ',registrationTagline:'ನಿಮ್ಮ ಡಿಜಿಟಲ್ ಕೃಷಿ ಸ್ನೇಹಿತ. ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಪ್ರಾರಂಭಿಸೋಣ.',registrationStep:'ಹಂತ 1/2 · ರೈತರ ನೋಂದಣಿ',tellUsWho:'ನಿಮ್ಮ ಬಗ್ಗೆ ತಿಳಿಸಿ',registrationHelp:'ನಿಮ್ಮ ಹೊಲದ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ಮುಂದುವರಿಯಲು ಹೆಸರು ಮತ್ತು ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ.',farmerFullName:'ರೈತರ ಪೂರ್ಣ ಹೆಸರು',registerContinue:'ನೋಂದಾಯಿಸಿ ಮುಂದುವರಿಯಿರಿ',privacy:'ಈ ಡೆಮೊಗಾಗಿ ನಿಮ್ಮ ವಿವರಗಳು ಈ ಬ್ರೌಸರ್‌ನಲ್ಲೇ ಉಳಿಯುತ್ತವೆ. ಲಾಗ್ ಔಟ್ ಮಾಡಿದರೆ ನೋಂದಣಿ ಪುಟಕ್ಕೆ ಮರಳುತ್ತೀರಿ; OTP ಅಥವಾ SMS ಕಳುಹಿಸಲಾಗುವುದಿಲ್ಲ.',namaste:'ನಮಸ್ಕಾರ 🙏 ನಿಮ್ಮ ಹೊಲದ ಬಗ್ಗೆ ತಿಳಿಸಿ. ಮುಂದೇನು ಮಾಡಬೇಕೆಂದು ನಾವು ತಿಳಿಸುತ್ತೇವೆ.',smartFarming:'ಸ್ಮಾರ್ಟ್ ಕೃಷಿ • ಸ್ಥಳೀಯ ಮಾರ್ಗದರ್ಶನ',betterFarms:'ಉತ್ತಮ ನಿರ್ಧಾರಗಳು, ಆರೋಗ್ಯಕರ ಹೊಲಗಳು.',selectCrop:'ಬೆಳೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ',acreHectare:'1 ಎಕರೆ = 0.405 ಹೆಕ್ಟೇರ್',initialStage:'ಆರಂಭಿಕ ಹಂತ',developmentStage:'ಬೆಳವಣಿಗೆ ಹಂತ',midSeasonStage:'ಮಧ್ಯ ಹಂತ',lateSeasonStage:'ಕೊನೆಯ ಹಂತ',sandySoil:'ಮರಳು ಮಣ್ಣು',redSoil:'ಕೆಂಪು ಮಣ್ಣು',loamySoil:'ಲೋಮಿ ಮಣ್ಣು',claySoil:'ಜೇಡಿ ಮಣ್ಣು',blackSoil:'ಕಪ್ಪು ಮಣ್ಣು'}
+};
+
+// v7.4: localized crop, soil, stage and result terminology.
+Object.assign(FULL_TEXT_KEYS, {"Rice": "v74_0", "Wheat": "v74_1", "Maize": "v74_2", "Tomato": "v74_3", "Cotton": "v74_4", "Sugarcane": "v74_5", "Ragi": "v74_6", "Millet": "v74_7", "Groundnut": "v74_8", "Soybean": "v74_9", "Potato": "v74_10", "Onion": "v74_11", "Chilli": "v74_12", "Banana": "v74_13", "Turmeric": "v74_14", "Red": "v74_15", "Sandy": "v74_16", "Loamy": "v74_17", "Clay": "v74_18", "Black": "v74_19", "Initial": "v74_20", "Development": "v74_21", "Mid-season": "v74_22", "Late-season": "v74_23", "Auto": "v74_24", "average temperature": "v74_25", "fit": "v74_26", "AI picked": "v74_27", "sample data: no internet": "v74_28", "per acre": "v74_29", "Yield": "v74_30", "Price": "v74_31", "Suitability": "v74_32", "Low suitability": "v74_33", "Very suitable": "v74_34"});
+Object.assign(FULL_MANUAL.hi, {"v74_0": "चावल", "v74_1": "गेहूँ", "v74_2": "मक्का", "v74_3": "टमाटर", "v74_4": "कपास", "v74_5": "गन्ना", "v74_6": "रागी", "v74_7": "बाजरा", "v74_8": "मूंगफली", "v74_9": "सोयाबीन", "v74_10": "आलू", "v74_11": "प्याज", "v74_12": "मिर्च", "v74_13": "केला", "v74_14": "हल्दी", "v74_15": "लाल मिट्टी", "v74_16": "रेतीली मिट्टी", "v74_17": "दोमट मिट्टी", "v74_18": "चिकनी मिट्टी", "v74_19": "काली मिट्टी", "v74_20": "शुरुआती अवस्था", "v74_21": "विकास अवस्था", "v74_22": "मध्य मौसम", "v74_23": "अंतिम अवस्था", "v74_24": "AI द्वारा चयन", "v74_25": "औसत तापमान", "v74_26": "अनुकूलता", "v74_27": "AI द्वारा चुना गया", "v74_28": "नमूना डेटा: इंटरनेट नहीं", "v74_29": "प्रति एकड़", "v74_30": "उपज", "v74_31": "कीमत", "v74_32": "उपयुक्तता", "v74_33": "कम उपयुक्तता", "v74_34": "बहुत उपयुक्त"});
+Object.assign(FULL_MANUAL.kn, {"v74_0": "ಅಕ್ಕಿ", "v74_1": "ಗೋಧಿ", "v74_2": "ಮೆಕ್ಕೆಜೋಳ", "v74_3": "ಟೊಮೆಟೊ", "v74_4": "ಹತ್ತಿ", "v74_5": "ಕಬ್ಬು", "v74_6": "ರಾಗಿ", "v74_7": "ಸಜ್ಜೆ", "v74_8": "ಕಡಲೆಕಾಯಿ", "v74_9": "ಸೋಯಾಬೀನ್", "v74_10": "ಆಲೂಗಡ್ಡೆ", "v74_11": "ಈರುಳ್ಳಿ", "v74_12": "ಮೆಣಸಿನಕಾಯಿ", "v74_13": "ಬಾಳೆಹಣ್ಣು", "v74_14": "ಅರಿಶಿನ", "v74_15": "ಕೆಂಪು ಮಣ್ಣು", "v74_16": "ಮರಳು ಮಣ್ಣು", "v74_17": "ಗೋಡು ಮಣ್ಣು", "v74_18": "ಜೇಡಿ ಮಣ್ಣು", "v74_19": "ಕಪ್ಪು ಮಣ್ಣು", "v74_20": "ಆರಂಭಿಕ ಹಂತ", "v74_21": "ಬೆಳವಣಿಗೆಯ ಹಂತ", "v74_22": "ಮಧ್ಯ ಋತು", "v74_23": "ಕೊನೆಯ ಹಂತ", "v74_24": "AI ಆಯ್ಕೆ", "v74_25": "ಸರಾಸರಿ ತಾಪಮಾನ", "v74_26": "ಹೊಂದಾಣಿಕೆ", "v74_27": "AI ಆಯ್ಕೆ ಮಾಡಿದೆ", "v74_28": "ಮಾದರಿ ಡೇಟಾ: ಇಂಟರ್ನೆಟ್ ಇಲ್ಲ", "v74_29": "ಪ್ರತಿ ಎಕರೆಗೆ", "v74_30": "ಇಳುವರಿ", "v74_31": "ಬೆಲೆ", "v74_32": "ಸೂಕ್ತತೆ", "v74_33": "ಕಡಿಮೆ ಸೂಕ್ತತೆ", "v74_34": "ತುಂಬಾ ಸೂಕ್ತ"});
+Object.assign(FULL_MANUAL.te, {"v74_0": "వరి", "v74_1": "గోధుమ", "v74_2": "మొక్కజొన్న", "v74_3": "టమాటా", "v74_4": "పత్తి", "v74_5": "చెరకు", "v74_6": "రాగి", "v74_7": "సజ్జలు", "v74_8": "వేరుశెనగ", "v74_9": "సోయాబీన్", "v74_10": "బంగాళాదుంప", "v74_11": "ఉల్లిపాయ", "v74_12": "మిరప", "v74_13": "అరటి", "v74_14": "పసుపు", "v74_15": "ఎర్ర నేల", "v74_16": "ఇసుక నేల", "v74_17": "లోమీ నేల", "v74_18": "బంకమట్టి", "v74_19": "నల్ల నేల", "v74_20": "ప్రారంభ దశ", "v74_21": "వృద్ధి దశ", "v74_22": "మధ్య దశ", "v74_23": "చివరి దశ", "v74_24": "AI ఎంపిక", "v74_25": "సగటు ఉష్ణోగ్రత", "v74_26": "అనుకూలత", "v74_27": "AI ఎంపిక చేసింది", "v74_28": "నమూనా డేటా: ఇంటర్నెట్ లేదు", "v74_29": "ఎకరానికి", "v74_30": "దిగుబడి", "v74_31": "ధర", "v74_32": "అనుకూలత", "v74_33": "తక్కువ అనుకూలత", "v74_34": "చాలా అనుకూలం"});
+function localizedMessage(key,fallback){return (FULL_MANUAL[selectedLanguage]||{})[key]||fallback;}
+function sourceTextFor(text){
+ if(FULL_TEXT_KEYS[text])return text;
+ for(const [source,key] of Object.entries(FULL_TEXT_KEYS)){
+  for(const lang of ['hi','te','kn']){const value=(FULL_MANUAL[lang]||{})[key]||(UI[lang]||{})[key]||(EXTRA_UI[lang]||{})[key];if(value&&value===text)return source;}
+ }
+ return text;
+}
+function translateDynamicPageText(text,lang){
+ const picked=text.match(/^(.+?) \(AI picked\)$/);
+ if(picked){const names={Rice:{hi:"चावल",kn:"ಅಕ್ಕಿ",te:"వరి"},Wheat:{hi:"गेहूँ",kn:"ಗೋಧಿ",te:"గోధుమ"},Maize:{hi:"मक्का",kn:"ಮೆಕ್ಕೆಜೋಳ",te:"మొక్కజొన్న"},Tomato:{hi:"टमाटर",kn:"ಟೊಮೆಟೊ",te:"టమాటా"},Cotton:{hi:"कपास",kn:"ಹತ್ತಿ",te:"పత్తి"},Sugarcane:{hi:"गन्ना",kn:"ಕಬ್ಬು",te:"చెరకు"},Ragi:{hi:"रागी",kn:"ರಾಗಿ",te:"రాగి"}};return `${names[picked[1]]?.[lang]||picked[1]} (${lang==="hi"?"AI द्वारा चुना गया":lang==="kn"?"AI ಆಯ್ಕೆ ಮಾಡಿದೆ":"AI ఎంపిక చేసింది"})`;}
+ const fitLine=text.match(/^(\\d+%) · average temperature ([\\d.]+)°C$/);
+ if(fitLine){const pct=fitLine[1],temp=fitLine[2];return lang==="hi"?`${pct} · औसत तापमान ${temp}°C`:lang==="kn"?`${pct} · ಸರಾಸರಿ ತಾಪಮಾನ ${temp}°C`:`${pct} · సగటు ఉష్ణోగ్రత ${temp}°C`;}
+
+ let m=text.match(/^Loaded (\d+) location options\. Data is based on LGD-derived public administrative listings; local names may vary\.?$/);
+ if(m){if(lang==='hi')return `${m[1]} स्थान विकल्प लोड हुए। सूची सार्वजनिक प्रशासनिक रिकॉर्ड पर आधारित है; स्थानीय नाम अलग हो सकते हैं।`;if(lang==='te')return `${m[1]} ప్రాంతాల ఎంపికలు లోడ్ అయ్యాయి. ఈ జాబితా పబ్లిక్ పరిపాలనా రికార్డుల ఆధారంగా ఉంది; స్థానిక పేర్లు మారవచ్చు.`;if(lang==='kn')return `${m[1]} ಸ್ಥಳ ಆಯ್ಕೆಗಳು ಲೋಡ್ ಆಗಿವೆ. ಪಟ್ಟಿ ಸಾರ್ವಜನಿಕ ಆಡಳಿತ ದಾಖಲೆಗಳನ್ನು ಆಧರಿಸಿದೆ; ಸ್ಥಳೀಯ ಹೆಸರುಗಳು ಬದಲಾಗಬಹುದು.`;}
+ if(text.startsWith('Village/city records were unavailable for this district.')){if(lang==='hi')return 'इस जिले के गाँव/शहर के रिकॉर्ड उपलब्ध नहीं थे। इसके स्थान पर आधिकारिक उप-जिला (तालुक/तहसील) दिखाए जा रहे हैं।';if(lang==='te')return 'ఈ జిల్లాకు గ్రామం/నగర రికార్డులు అందుబాటులో లేవు. బదులుగా అధికారిక ఉపజిల్లాలు (తాలూకాలు/తహసీల్లు) చూపిస్తున్నాము.';if(lang==='kn')return 'ಈ ಜಿಲ್ಲೆಗೆ ಗ್ರಾಮ/ನಗರ ದಾಖಲೆಗಳು ಲಭ್ಯವಿಲ್ಲ. ಬದಲಾಗಿ ಅಧಿಕೃತ ಉಪಜಿಲ್ಲೆಗಳು (ತಾಲೂಕು/ತಹಸೀಲ್ದಾರ್ ವಿಭಾಗಗಳು) ತೋರಿಸಲಾಗುತ್ತಿವೆ.';}
+ return null;
+}
+function fullTranslationFor(source,lang){
+ source=sourceTextFor(source);
+ const manual=FULL_MANUAL[lang]||{};if(manual[FULL_TEXT_KEYS[source]])return manual[FULL_TEXT_KEYS[source]];
+ const key=FULL_TEXT_KEYS[source];if(!key)return null;
+ const d=UI[lang]||{};const x=(EXTRA_UI&&EXTRA_UI[lang])||{};
+ return d[key]||x[key]||null;
+}
+function cacheOriginalText(root){
+ const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;
+ while((n=walker.nextNode())){if(!n.__fsOriginalText)n.__fsOriginalText=n.nodeValue;}
+ root.querySelectorAll?.('input[placeholder],textarea[placeholder],button[title],[aria-label]').forEach(el=>{
+  if(el.hasAttribute('placeholder')&&!el.dataset.fsOriginalPlaceholder)el.dataset.fsOriginalPlaceholder=el.getAttribute('placeholder');
+  if(el.hasAttribute('title')&&!el.dataset.fsOriginalTitle)el.dataset.fsOriginalTitle=el.getAttribute('title');
+  if(el.hasAttribute('aria-label')&&!el.dataset.fsOriginalAria)el.dataset.fsOriginalAria=el.getAttribute('aria-label');
+ });
+}
+function translateWholePage(lang){
+ if(!['en','hi','kn','te'].includes(lang))lang='en';
+ cacheOriginalText(document.body);
+ const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
+ while((n=walker.nextNode())){
+  const original=n.__fsOriginalText??n.nodeValue;const trimmed=original.trim();if(!trimmed)continue;
+  let translated=null;
+  if(lang==='en'){const src=sourceTextFor(trimmed);translated=src===trimmed?original:src;}
+  else translated=translateDynamicPageText(trimmed,lang)||fullTranslationFor(trimmed,lang);
+  if(translated!==null&&translated!==undefined){const lead=original.match(/^\s*/)?.[0]||'';const tail=original.match(/\s*$/)?.[0]||'';n.nodeValue=lead+translated+tail;}
+ }
+ const attrMap={
+  'Example: 2.5':{hi:'उदाहरण: 2.5',te:'ఉదాహరణ: 2.5',kn:'ಉದಾಹರಣೆ: 2.5'},
+  'e.g. Ragi, maize':{hi:'जैसे: रागी, मक्का',te:'ఉదా: రాగి, మొక్కజొన్న',kn:'ಉದಾ: ರಾಗಿ, ಮೆಕ್ಕೆಜೋಳ'},
+  'Soil moisture':{hi:'मिट्टी की नमी',te:'నేల తేమ',kn:'ಮಣ್ಣಿನ ತೇವಾಂಶ'}
+ };
+ document.querySelectorAll('input[placeholder],textarea[placeholder]').forEach(el=>{const src=el.dataset.fsOriginalPlaceholder;if(src){const tr=attrMap[src]?.[lang];if(tr)el.setAttribute('placeholder',tr);else if(lang==='en')el.setAttribute('placeholder',src)}});
+ document.querySelectorAll('[title]').forEach(el=>{const src=el.dataset.fsOriginalTitle;if(src){const tr=attrMap[src]?.[lang];if(tr)el.setAttribute('title',tr);else if(lang==='en')el.setAttribute('title',src)}});
+ document.querySelectorAll('[aria-label]').forEach(el=>{const src=el.dataset.fsOriginalAria;if(src){const tr=attrMap[src]?.[lang];if(tr)el.setAttribute('aria-label',tr);else if(lang==='en')el.setAttribute('aria-label',src)}});
+ document.documentElement.lang=lang;
+}
+const _baseApplyLanguage=applyLanguage;
+applyLanguage=function(lang){
+ selectedLanguage=lang||'en';cacheOriginalText(document.body);
+ _baseApplyLanguage(selectedLanguage);
+ translateWholePage(selectedLanguage);
+ requestAnimationFrame(()=>translateWholePage(selectedLanguage));
+};
+// Translate elements inserted later (location options, crop tiles, advice cards and alerts).
+const pageLanguageObserver=new MutationObserver(records=>{
+ if(!selectedLanguage||selectedLanguage==='en')return;
+ let changed=false;
+ for(const rec of records){
+  if(rec.type==='childList')rec.addedNodes.forEach(node=>{if(node.nodeType===Node.TEXT_NODE){if(!node.__fsOriginalText)node.__fsOriginalText=node.nodeValue;changed=true;}else if(node.nodeType===Node.ELEMENT_NODE){cacheOriginalText(node);changed=true;}});
+  else if(rec.type==='characterData'&&rec.target&&!rec.target.__fsOriginalText){rec.target.__fsOriginalText=rec.target.nodeValue;changed=true;}
+ }
+ if(changed)requestAnimationFrame(()=>{translateWholePage(selectedLanguage);if(typeof applyFarmV75DynamicLanguage==="function")applyFarmV75DynamicLanguage();});
+});
+pageLanguageObserver.observe(document.body,{subtree:true,childList:true,characterData:true});
+// Keep every visible language selector and the active translation state synchronized.
+['registrationLanguage','regLanguage','language'].forEach(id=>{
+ const control=document.getElementById(id);
+ if(control) control.addEventListener('change',event=>{
+  const chosen=['en','hi','kn','te'].includes(event.target.value)?event.target.value:'en';
+  if(chosen!==selectedLanguage || $('language').value!==chosen) applyLanguage(chosen);
+ });
+});
+
+// Reapply the saved farmer language after the full-page translation layer is installed.
+try{const savedLang=JSON.parse(localStorage.getItem('farmsaathi_farmer_profile')||'null')?.language;const hasActiveSession=sessionStorage.getItem('farmsaathi_active_session')==='1';if(hasActiveSession&&savedLang)applyLanguage(savedLang);}catch(e){}
+
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/static/sw.js').catch(()=>{}));}
+
+// v7.4: localize recognized English crop names in the "Previous crop" field.
+const FARM_CROP_ALIASES={
+ "ragi":"Ragi","raagi":"Ragi","finger millet":"Ragi","millet":"Millet","bajra":"Millet",
+ "rice":"Rice","paddy":"Rice","wheat":"Wheat","maize":"Maize","corn":"Maize","tomato":"Tomato",
+ "cotton":"Cotton","sugarcane":"Sugarcane","sugar cane":"Sugarcane","groundnut":"Groundnut",
+ "peanut":"Groundnut","soybean":"Soybean","potato":"Potato","onion":"Onion","chilli":"Chilli",
+ "chili":"Chilli","banana":"Banana","turmeric":"Turmeric"
+};
+const FARM_CROP_LOCAL={
+ hi:{Ragi:"रागी",Millet:"बाजरा",Rice:"चावल",Wheat:"गेहूँ",Maize:"मक्का",Tomato:"टमाटर",Cotton:"कपास",Sugarcane:"गन्ना",Groundnut:"मूंगफली",Soybean:"सोयाबीन",Potato:"आलू",Onion:"प्याज",Chilli:"मिर्च",Banana:"केला",Turmeric:"हल्दी"},
+ kn:{Ragi:"ರಾಗಿ",Millet:"ಸಜ್ಜೆ",Rice:"ಅಕ್ಕಿ",Wheat:"ಗೋಧಿ",Maize:"ಮೆಕ್ಕೆಜೋಳ",Tomato:"ಟೊಮೆಟೊ",Cotton:"ಹತ್ತಿ",Sugarcane:"ಕಬ್ಬು",Groundnut:"ಕಡಲೆಕಾಯಿ",Soybean:"ಸೋಯಾಬೀನ್",Potato:"ಆಲೂಗಡ್ಡೆ",Onion:"ಈರುಳ್ಳಿ",Chilli:"ಮೆಣಸಿನಕಾಯಿ",Banana:"ಬಾಳೆಹಣ್ಣು",Turmeric:"ಅರಿಶಿನ"},
+ te:{Ragi:"రాగి",Millet:"సజ్జలు",Rice:"వరి",Wheat:"గోధుమ",Maize:"మొక్కజొన్న",Tomato:"టమాటా",Cotton:"పత్తి",Sugarcane:"చెరకు",Groundnut:"వేరుశెనగ",Soybean:"సోయాబీన్",Potato:"బంగాళాదుంప",Onion:"ఉల్లిపాయ",Chilli:"మిరప",Banana:"అరటి",Turmeric:"పసుపు"}
+};
+function renderPreviousCropLanguage(){
+ const el=document.getElementById("previousCrop");if(!el)return;
+ if(el.dataset.canonicalCrop===undefined)el.dataset.canonicalCrop=el.value;
+ const raw=el.dataset.canonicalCrop.trim();
+ const localizedPart=part=>{
+  const key=part.trim().toLowerCase();
+  const canonical=FARM_CROP_ALIASES[key];
+  return canonical?(FARM_CROP_LOCAL[selectedLanguage]?.[canonical]||canonical):part.trim();
+ };
+ el.value=raw.split(/([,;/])/).map(part=>/^[,;/]$/.test(part)?part:localizedPart(part)).join("");
+}
+const _applyLanguageV74=applyLanguage;
+applyLanguage=function(lang){
+ const hadAdvice=!!(document.querySelector("#out .banner") && document.getElementById("appMain")?.style.display!=="none");
+ _applyLanguageV74(lang);
+ requestAnimationFrame(()=>{
+  renderPreviousCropLanguage();
+  applyFarmV75DynamicLanguage();
+  // Re-request existing advice in the newly selected language.
+  if(hadAdvice){
+   const adviceForm=document.getElementById("f");
+   if(adviceForm) adviceForm.requestSubmit();
+  }
+ });
+};
+const previousCropV74=document.getElementById("previousCrop");
+if(previousCropV74){
+ previousCropV74.addEventListener("input",()=>{previousCropV74.dataset.canonicalCrop=previousCropV74.value;});
+ previousCropV74.addEventListener("blur",renderPreviousCropLanguage);
+}
+
+
+// v7.5: complete localization for dynamically rendered controls, cards and forecast table.
+const FARM_V75_LANG = {"hi":{"auto":"AI को सबसे अच्छी फसल चुनने दें","soilDesc":{"Sandy":"हल्की मिट्टी, पानी जल्दी निकलता है","Red":"लाल मिट्टी, ह्यूमस कम","Loamy":"भुरभुरी मिट्टी, सामान्यतः अच्छी","Clay":"चिकनी मिट्टी, पानी रोकती है","Black":"गहरी मिट्टी, सूखने पर दरारें पड़ती हैं"},"soil":{"Sandy":"रेतीली मिट्टी","Red":"लाल मिट्टी","Loamy":"दोमट मिट्टी","Clay":"चिकनी मिट्टी","Black":"काली मिट्टी"},"crop":{"Rice":"चावल","Wheat":"गेहूँ","Maize":"मक्का","Tomato":"टमाटर","Cotton":"कपास","Sugarcane":"गन्ना","Ragi":"रागी","Millet":"बाजरा"},"stage":{"Just sown":"अभी-अभी बोया","Growing":"बढ़ रही है","Flowering":"फूल आना","Ripening":"पकना","Initial":"शुरुआती अवस्था","Development":"विकास अवस्था","Mid-season":"मध्य अवस्था","Late-season":"अंतिम अवस्था"},"level":{"Low":"कम","Medium":"मध्यम","High":"अधिक"},"selectState":"राज्य / केंद्र शासित प्रदेश चुनें","selectDistrict":"ज़िला चुनें","selectVillage":"गाँव / कस्बा / शहर चुनें","fert":{"DAP":"डीएपी उर्वरक","MOP":"एमओपी उर्वरक","Urea":"यूरिया"},"table":["तारीख","अधिकतम/न्यूनतम °C","वर्षा मिमी","वर्षा %","ET₀","उपयोग किया गया पानी (मिमी)"],"cropFit":"आपकी फसल की अनुकूलता","perAcre":"प्रति एकड़","average":"औसत तापमान","accuracy":"मॉडल की सटीकता","sampleAccuracy":"यह नमूना प्रशिक्षण डेटा पर आधारित है। सटीकता बताने से पहले वास्तविक डेटा से दोबारा प्रशिक्षण करें।","samplePrice":"कीमतें, उपज और अनुकूलता अंक नमूना मान हैं। स्थानीय बाजार और कृषि कार्यालय से पुष्टि करें।","sampleProfit":"उपज, लागत और कीमतें नमूना मान हैं। इन्हें MSP, Agmarknet या स्थानीय जानकारी से अपडेट करें।","moisture":{"Very dry":"बहुत सूखी","Dry":"सूखी","Moist enough":"पर्याप्त नमी","Wet":"गीली","Very wet":"बहुत गीली"}},"kn":{"auto":"AI ಅತ್ಯುತ್ತಮ ಬೆಳೆಯನ್ನು ಆಯ್ಕೆಮಾಡಲಿ","soilDesc":{"Sandy":"ಹಗುರವಾದ ಮಣ್ಣು, ನೀರು ಬೇಗ ಹರಿದುಹೋಗುತ್ತದೆ","Red":"ಕೆಂಪು ಮಣ್ಣು, ಹ್ಯೂಮಸ್ ಕಡಿಮೆ","Loamy":"ಮೃದುವಾದ ಮಣ್ಣು, ಸಾಮಾನ್ಯವಾಗಿ ಉತ್ತಮ","Clay":"ಜೇಡಿ ಮಣ್ಣು, ನೀರನ್ನು ಹಿಡಿದಿಡುತ್ತದೆ","Black":"ಕಪ್ಪು ಮಣ್ಣು, ಒಣಗಿದಾಗ ಬಿರುಕು ಬಿಡುತ್ತದೆ"},"soil":{"Sandy":"ಮರಳು ಮಣ್ಣು","Red":"ಕೆಂಪು ಮಣ್ಣು","Loamy":"ಗೋಡು ಮಣ್ಣು","Clay":"ಜೇಡಿ ಮಣ್ಣು","Black":"ಕಪ್ಪು ಮಣ್ಣು"},"crop":{"Rice":"ಅಕ್ಕಿ","Wheat":"ಗೋಧಿ","Maize":"ಮೆಕ್ಕೆಜೋಳ","Tomato":"ಟೊಮೆಟೊ","Cotton":"ಹತ್ತಿ","Sugarcane":"ಕಬ್ಬು","Ragi":"ರಾಗಿ","Millet":"ಸಜ್ಜೆ"},"stage":{"Just sown":"ಈಗಷ್ಟೇ ಬಿತ್ತಲಾಗಿದೆ","Growing":"ಬೆಳೆಯುತ್ತಿದೆ","Flowering":"ಹೂ ಬಿಡುವ ಹಂತ","Ripening":"ಮಾಗುವ ಹಂತ","Initial":"ಆರಂಭಿಕ ಹಂತ","Development":"ಬೆಳವಣಿಗೆಯ ಹಂತ","Mid-season":"ಮಧ್ಯ ಹಂತ","Late-season":"ಕೊನೆಯ ಹಂತ"},"level":{"Low":"ಕಡಿಮೆ","Medium":"ಮಧ್ಯಮ","High":"ಹೆಚ್ಚು"},"selectState":"ರಾಜ್ಯ / ಕೇಂದ್ರಾಡಳಿತ ಪ್ರದೇಶ ಆಯ್ಕೆಮಾಡಿ","selectDistrict":"ಜಿಲ್ಲೆ ಆಯ್ಕೆಮಾಡಿ","selectVillage":"ಗ್ರಾಮ / ಪಟ್ಟಣ / ನಗರ ಆಯ್ಕೆಮಾಡಿ","fert":{"DAP":"ಡಿಎಪಿ ಗೊಬ್ಬರ","MOP":"ಎಂಒಪಿ ಗೊಬ್ಬರ","Urea":"ಯೂರಿಯಾ"},"table":["ದಿನಾಂಕ","ಗರಿಷ್ಠ/ಕನಿಷ್ಠ °C","ಮಳೆ ಮಿ.ಮೀ.","ಮಳೆಯ ಸಾಧ್ಯತೆ %","ET₀","ಬಳಸಿದ ನೀರು (ಮಿ.ಮೀ.)"],"cropFit":"ನಿಮ್ಮ ಬೆಳೆ ಹೊಂದಾಣಿಕೆ","perAcre":"ಪ್ರತಿ ಎಕರೆಗೆ","average":"ಸರಾಸರಿ ತಾಪಮಾನ","accuracy":"ಮಾದರಿಯ ನಿಖರತೆ","sampleAccuracy":"ಇದು ಮಾದರಿ ತರಬೇತಿ ಡೇಟಾವನ್ನು ಆಧರಿಸಿದೆ. ನಿಖರತೆ ಹೇಳುವ ಮೊದಲು ನೈಜ ಡೇಟಾದಿಂದ ಮರುತರಬೇತಿ ನೀಡಿ.","samplePrice":"ಬೆಲೆ, ಇಳುವರಿ ಮತ್ತು ಹೊಂದಾಣಿಕೆ ಅಂಕಗಳು ಮಾದರಿ ಮೌಲ್ಯಗಳು. ಸ್ಥಳೀಯ ಮಾರುಕಟ್ಟೆ ಮತ್ತು ಕೃಷಿ ಕಚೇರಿಯಲ್ಲಿ ಪರಿಶೀಲಿಸಿ.","sampleProfit":"ಇಳುವರಿ, ವೆಚ್ಚ ಮತ್ತು ಬೆಲೆಗಳು ಮಾದರಿ ಮೌಲ್ಯಗಳು. MSP, Agmarknet ಅಥವಾ ಸ್ಥಳೀಯ ಮಾಹಿತಿಯಿಂದ ನವೀಕರಿಸಿ.","moisture":{"Very dry":"ತುಂಬಾ ಒಣ","Dry":"ಒಣ","Moist enough":"ಸಾಕಷ್ಟು ತೇವಾಂಶ","Wet":"ತೇವ","Very wet":"ತುಂಬಾ ತೇವ"}},"te":{"auto":"AI ఉత్తమ పంటను ఎంచుకోనివ్వండి","soilDesc":{"Sandy":"తేలికపాటి నేల, నీరు త్వరగా ఇంకిపోతుంది","Red":"ఎర్ర నేల, హ్యూమస్ తక్కువ","Loamy":"మెత్తని నేల, సాధారణంగా అనుకూలం","Clay":"బంకమట్టి, నీటిని నిల్వ ఉంచుతుంది","Black":"నల్ల నేల, ఎండినప్పుడు పగుళ్లు వస్తాయి"},"soil":{"Sandy":"ఇసుక నేల","Red":"ఎర్ర నేల","Loamy":"లోమీ నేల","Clay":"బంకమట్టి","Black":"నల్ల నేల"},"crop":{"Rice":"వరి","Wheat":"గోధుమ","Maize":"మొక్కజొన్న","Tomato":"టమాటా","Cotton":"పత్తి","Sugarcane":"చెరకు","Ragi":"రాగి","Millet":"సజ్జలు"},"stage":{"Just sown":"ఇప్పుడే విత్తారు","Growing":"పెరుగుతోంది","Flowering":"పూత దశ","Ripening":"పక్వ దశ","Initial":"ప్రారంభ దశ","Development":"వృద్ధి దశ","Mid-season":"మధ్య దశ","Late-season":"చివరి దశ"},"level":{"Low":"తక్కువ","Medium":"మధ్యస్థం","High":"అధికం"},"selectState":"రాష్ట్రం / కేంద్రపాలిత ప్రాంతాన్ని ఎంచుకోండి","selectDistrict":"జిల్లాను ఎంచుకోండి","selectVillage":"గ్రామం / పట్టణం / నగరాన్ని ఎంచుకోండి","fert":{"DAP":"డీఏపీ ఎరువు","MOP":"ఎంఓపీ ఎరువు","Urea":"యూరియా"},"table":["తేదీ","గరిష్ఠం/కనిష్ఠం °C","వర్షపాతం మి.మీ.","వర్షం అవకాశం %","ET₀","వినియోగించిన నీరు (మి.మీ.)"],"cropFit":"మీ పంట అనుకూలత","perAcre":"ఎకరానికి","average":"సగటు ఉష్ణోగ్రత","accuracy":"మోడల్ ఖచ్చితత్వం","sampleAccuracy":"ఇది నమూనా శిక్షణ డేటాపై ఆధారపడింది. ఖచ్చితత్వం చెప్పే ముందు నిజమైన డేటాతో మళ్లీ శిక్షణ ఇవ్వండి.","samplePrice":"ధరలు, దిగుబడులు మరియు అనుకూలత స్కోర్లు నమూనా విలువలు. స్థానిక మార్కెట్ మరియు వ్యవసాయ కార్యాలయంలో నిర్ధారించండి.","sampleProfit":"దిగుబడి, ఖర్చు మరియు ధరలు నమూనా విలువలు. MSP, Agmarknet లేదా స్థానిక సమాచారంతో నవీకరించండి.","moisture":{"Very dry":"చాలా పొడి","Dry":"పొడి","Moist enough":"తగినంత తేమ","Wet":"తడి","Very wet":"చాలా తడి"}},"en":{"auto":"Let AI choose the best crop","soilDesc":{"Sandy":"Light, water drains fast","Red":"Reddish, low in humus","Loamy":"Soft and crumbly, best all-round","Clay":"Sticky, holds water","Black":"Dark, cracks when dry"},"soil":{"Sandy":"Sandy soil","Red":"Red soil","Loamy":"Loamy soil","Clay":"Clay soil","Black":"Black soil"},"crop":{"Rice":"Rice","Wheat":"Wheat","Maize":"Maize","Tomato":"Tomato","Cotton":"Cotton","Sugarcane":"Sugarcane","Ragi":"Ragi","Millet":"Millet"},"stage":{"Just sown":"Just sown","Growing":"Growing","Flowering":"Flowering","Ripening":"Ripening","Initial":"Initial","Development":"Development","Mid-season":"Mid-season","Late-season":"Late-season"},"level":{"Low":"Low","Medium":"Medium","High":"High"},"selectState":"Select state / UT","selectDistrict":"Select district","selectVillage":"Select village / town / city","fert":{"DAP":"DAP","MOP":"MOP","Urea":"Urea"},"table":["Date","Max/Min °C","Rain mm","Rain %","ET₀","Water used up (mm)"],"cropFit":"Your crop match","perAcre":"per acre","average":"average temperature","accuracy":"Model accuracy","sampleAccuracy":"is on sample training data. Retrain on real data before quoting it.","samplePrice":"Prices, yields and fit scores are sample values. Check with your local market and agriculture office.","sampleProfit":"Yield, cost and price are sample defaults. Update them from MSP, Agmarknet or local data.","moisture":{"Very dry":"Very dry","Dry":"Dry","Moist enough":"Moist enough","Wet":"Wet","Very wet":"Very wet"}}};
+
+const FARM_V76_CROP_NAMES = {"hi":{"Ragi":"रागी","Groundnut":"मूंगफली","Soybean":"सोयाबीन","Chickpea":"चना","Sorghum":"ज्वार","Pearl Millet":"बाजरा","Potato":"आलू","Onion":"प्याज","Chilli":"मिर्च","Banana":"केला"},"kn":{"Ragi":"ರಾಗಿ","Groundnut":"ಕಡಲೆಕಾಯಿ","Soybean":"ಸೋಯಾಬೀನ್","Chickpea":"ಕಡಲೆ","Sorghum":"ಜೋಳ","Pearl Millet":"ಸಜ್ಜೆ","Potato":"ಆಲೂಗಡ್ಡೆ","Onion":"ಈರುಳ್ಳಿ","Chilli":"ಮೆಣಸಿನಕಾಯಿ","Banana":"ಬಾಳೆಹಣ್ಣು"},"te":{"Ragi":"రాగి","Groundnut":"వేరుశెనగ","Soybean":"సోయాబీన్","Chickpea":"శనగలు","Sorghum":"జొన్న","Pearl Millet":"సజ్జలు","Potato":"బంగాళాదుంప","Onion":"ఉల్లిపాయ","Chilli":"మిరప","Banana":"అరటి"},"en":{"Ragi":"Ragi","Groundnut":"Groundnut","Soybean":"Soybean","Chickpea":"Chickpea","Sorghum":"Sorghum","Pearl Millet":"Pearl Millet","Potato":"Potato","Onion":"Onion","Chilli":"Chilli","Banana":"Banana"}};
+Object.keys(FARM_V76_CROP_NAMES).forEach(lang=>{
+ if(FARM_V75_LANG[lang])Object.assign(FARM_V75_LANG[lang].crop,FARM_V76_CROP_NAMES[lang]);
+});
+
+function farmLocal(key,group){
+ const d=FARM_V75_LANG[selectedLanguage]||{};
+ return (group&&d[group]&&d[group][key])||d[key]||key;
+}
+function applyFarmV75DynamicLanguage(){
+ const lang=selectedLanguage||"en";
+ const d=FARM_V75_LANG[lang]||FARM_V75_LANG.en;if(!d)return;
+ const canonicalTerm=(group,value)=>{
+  for(const one of Object.values(FARM_V75_LANG)){
+   const dict=one[group]||{};
+   for(const [canonical,localized] of Object.entries(dict)){if(localized===value)return canonical;}
+  }
+  return value;
+ };
+ // Crop / soil / crop-stage selection tiles (these are generated after page load).
+ document.querySelectorAll("#cropTiles .tile").forEach(tile=>{
+  const v=tile.dataset.v,b=tile.querySelector("b");
+  if(!b)return;
+  b.textContent=v==="Auto"?d.auto:(d.crop[v]||v);
+ });
+ document.querySelectorAll("#soilTiles .tile").forEach(tile=>{
+  const v=tile.dataset.v,b=tile.querySelector("b"),s=tile.querySelector(".s");
+  if(b)b.textContent=d.soil[v]||v;
+  if(s)s.textContent=d.soilDesc[v]||s.textContent;
+ });
+ document.querySelectorAll("#stageTiles .tile").forEach(tile=>{
+  const b=tile.querySelector("b"),spans=tile.querySelectorAll(".s");
+  if(b){const canonical=canonicalTerm("stage",b.textContent);b.textContent=d.stage[canonical]||d.stage[["Just sown","Growing","Flowering","Ripening"][Number(tile.dataset.v)]]||b.textContent;}
+  if(spans.length){const current=spans[0].textContent;const canonical=canonicalTerm("stage",current);spans[0].textContent=d.stage[canonical]||d.stage[["Initial","Development","Mid-season","Late-season"][Number(tile.dataset.v)]]||current;}
+ });
+ // Crop/soil/stage selects are kept with canonical values; only visible labels change.
+ ["crop","soil","stage","n","p","k"].forEach(id=>{
+  const el=document.getElementById(id);if(!el)return;
+  [...el.options].forEach(opt=>{
+   const shown=opt.textContent;
+   const raw=id==="crop"?(shown==="Auto"? "Auto":canonicalTerm("crop",shown)):
+             id==="soil"?canonicalTerm("soil",shown):
+             id==="stage"?canonicalTerm("stage",shown):
+             canonicalTerm("level",shown);
+   if(id==="crop")opt.textContent=raw==="Auto"?d.auto:(d.crop[raw]||raw);
+   else if(id==="soil")opt.textContent=d.soil[raw]||raw;
+   else if(id==="stage")opt.textContent=d.stage[raw]||raw;
+   else opt.textContent=d.level[raw]||raw;
+  });
+ });
+ // State, district and village names remain proper administrative names; placeholders are localized.
+ const state=document.getElementById("farmState"),district=document.getElementById("farmDistrict"),village=document.getElementById("loc");
+ [[state,d.selectState],[district,d.selectDistrict],[village,d.selectVillage]].forEach(([el,label])=>{
+  if(el&&el.options.length&&label)el.options[0].textContent=label;
+ });
+ // Small dynamic status/help labels.
+ const moisture=document.getElementById("smt");
+ if(moisture){const canonical=canonicalTerm("moisture",moisture.textContent);moisture.textContent=d.moisture[canonical]||canonical;}
+ const waterLeft=document.getElementById("waterLeftLabel");
+ if(waterLeft)waterLeft.textContent=lang==="hi"?"पानी शेष":lang==="kn"?"ನೀರು ಉಳಿದಿದೆ":lang==="te"?"నీరు మిగిలి ఉంది":"water left";
+ // Advice result cards.
+ document.querySelectorAll("#out .box h3").forEach(el=>{
+  const raw=el.dataset.fsCanonicalLabel||(el.dataset.fsCanonicalLabel=el.textContent.trim());
+  const crop=Object.keys(FARM_V75_LANG.en.crop).find(name=>raw.endsWith(" "+name));
+  if(crop)el.textContent=raw.slice(0,raw.length-crop.length)+(d.crop[crop]||crop);
+ });
+ document.querySelectorAll("#out .rank .nm").forEach(el=>{
+  const shown=el.textContent.trim();
+  const crop=Object.keys(FARM_V75_LANG.en.crop).find(name=>shown.includes(name));
+  if(crop){
+   const trophy=shown.startsWith("🏆")?"🏆 ":"";
+   const poor=shown.includes("(poor fit)")?(lang==="hi"?" (कम अनुकूल)":lang==="kn"?" (ಕಡಿಮೆ ಹೊಂದಾಣಿಕೆ)":" (తక్కువ అనుకూలత)"):"";
+   el.textContent=trophy+(d.crop[crop]||crop)+poor;
+  }
+ });
+ document.querySelectorAll("#out .meta span").forEach(el=>{
+  // Keep the first, canonical English value so changing languages is reversible.
+  const raw=el.dataset.fsCanonicalMeta||(el.dataset.fsCanonicalMeta=el.textContent.trim());
+  const crop=Object.keys(FARM_V75_LANG.en.crop).find(name=>raw.includes(name));
+  if(crop){
+   const suffix=raw.includes("(AI picked)")?(" ("+(lang==="hi"?"AI द्वारा चुना गया":lang==="kn"?"AI ಆಯ್ಕೆ ಮಾಡಿದೆ":lang==="te"?"AI ఎంపిక చేసింది":"AI picked")+")"):"";
+   el.textContent=(d.crop[crop]||crop)+suffix;
+  }
+  // The offline marker is part of the location chip. Translate only its suffix;
+  // never replace the whole chip (which previously hid the place and defaulted to Telugu in English mode).
+  const offlineMatch=raw.match(/^(📍\s*)?(.*?)\s*\(sample data: no internet\)$/i);
+  if(offlineMatch){
+   const offlineLabel={
+    en:"sample data: no internet",
+    hi:"नमूना डेटा: इंटरनेट उपलब्ध नहीं है",
+    kn:"ಮಾದರಿ ಡೇಟಾ: ಇಂಟರ್ನೆಟ್ ಇಲ್ಲ",
+    te:"నమూనా డేటా: ఇంటర్నెట్ లేదు"
+   }[lang]||"sample data: no internet";
+   const pin=offlineMatch[1]||"";
+   const place=offlineMatch[2]||"";
+   el.textContent=(pin+place+(place?" ":"")+"("+offlineLabel+")").trim();
+  }
+ });
+ document.querySelectorAll("#out .bag small").forEach(el=>{const raw=el.dataset.fsCanonicalLabel||(el.dataset.fsCanonicalLabel=el.textContent.trim());el.textContent=d.fert[raw]||raw;});
+ document.querySelectorAll("#out .small").forEach(el=>{
+  const raw=el.dataset.fsCanonicalLabel||(el.dataset.fsCanonicalLabel=el.textContent);
+  if(raw.includes("Your crop match"))el.textContent=raw.replace("Your crop match",d.cropFit);
+  else if(raw.includes("average temperature"))el.textContent=raw.replace("average temperature",d.average);
+  else if(raw.includes("Model accuracy"))el.textContent=raw.replace("Model accuracy",d.accuracy);
+  else if(raw.includes("Prices, yields and fit scores are sample values. Check with your local market and agriculture office."))el.textContent=d.samplePrice;
+  else if(raw.includes("Yield, cost and price are sample defaults. Update them from MSP, Agmarknet or local data."))el.textContent=d.sampleProfit;
+ });
+ // Forecast table headers: all six labels are localized, including Telugu.
+ const table=document.querySelector("#out table");
+ if(table&&table.rows.length){
+  const th=[...table.rows[0].cells],labels=d.table;
+  // The fourth column is the rain bar and intentionally has no heading.
+  [0,1,2,4,5,6].forEach((col,i)=>{if(th[col])th[col].textContent=labels[i];});
+ }
+}
+
+
+// Stable controls: the HTML buttons call these handlers directly.
+window.FarmSaathiControls = {
+ status: function(value) {
+  const status=document.getElementById('status');
+  if(!status) return;
+  status.value=value;
+  document.querySelectorAll('#statusTiles .tile').forEach(b=>b.classList.toggle('on',b.dataset.v===value));
+  const stagebox=document.getElementById('stagebox');
+  if(stagebox) stagebox.style.display=value==='grow'?'':'none';
+  if(value==='grow') {
+   const crop=document.getElementById('crop');
+   if(crop && crop.value==='Auto') { crop.value='Rice'; crop.dispatchEvent(new Event('change',{bubbles:true})); }
+  }
+  status.dispatchEvent(new Event('change',{bubbles:true}));
+ },
+ npk: function(id,value) {
+  const select=document.getElementById(id);
+  if(select) { select.value=value; select.dispatchEvent(new Event('change',{bubbles:true})); }
+  const group=document.querySelector('.seg[data-for="'+id+'"]');
+  if(group) group.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===value));
+ }
+};
+document.querySelectorAll('#statusTiles .tile').forEach(b=>{
+ b.addEventListener('click',function(){window.FarmSaathiControls.status(this.dataset.v);});
+});
+
+</script></body></html>
